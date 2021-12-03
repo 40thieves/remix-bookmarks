@@ -122,25 +122,26 @@ function Document({
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <header>
-        <div>
-          <Link to="/">
-            <h1>Bookmarks</h1>
-          </Link>
-          <nav aria-label="Main navigation">
-            <NavLink to="/">Home</NavLink>
-          </nav>
-        </div>
+    <>
+      <header className="header__container">
+        <Link to="/">
+          <h1>Bookmarks</h1>
+        </Link>
+
+        <nav aria-label="Main navigation" className="header__nav">
+          <NavLink to="/" className="header__nav-link">
+            Home
+          </NavLink>
+        </nav>
       </header>
 
-      <main>{children}</main>
+      <main className="main__container">{children}</main>
 
-      <footer>
+      <footer className="footer__container">
         <div>
-          <p>&copy; You!</p>
+          <p className="footer__copyright">&copy; You!</p>
         </div>
       </footer>
-    </div>
+    </>
   )
 }

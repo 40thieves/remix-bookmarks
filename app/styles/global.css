@@ -1,47 +1,45 @@
-/*
- * You can just delete everything here or keep whatever you like, it's just a
- * quick baseline!
- */
 :root {
   --color-foreground: hsl(0, 0%, 7%);
   --color-background: hsl(0, 0%, 100%);
   --color-links: hsl(213, 100%, 52%);
-  --color-links-hover: hsl(213, 100%, 43%);
   --color-border: hsl(0, 0%, 82%);
   --font-body: -apple-system, "Segoe UI", Helvetica Neue, Helvetica, Roboto,
     Arial, sans-serif, system-ui, "Apple Color Emoji", "Segoe UI Emoji";
+  --max-width: 70ch;
+  --layout-spacing: 3rem;
 }
 
-html {
+* {
   box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-:-moz-focusring {
-  outline: auto;
-}
-
-:focus {
-  outline: var(--color-links) solid 2px;
-  outline-offset: 2px;
-}
-
-html,
-body {
-  padding: 0;
   margin: 0;
-  background-color: var(--color-background);
-  color: var(--color-foreground);
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: var(--font-body);
   line-height: 1.5;
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+}
+
+body > * {
+  width: min(100%, var(--max-width));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+:is(h1, h2, h3) {
+  line-height: 1.2;
+}
+
+:is(h2, h3):not(:first-child) {
+  margin-top: 2em;
+}
+
+article * + * {
+  margin-top: 1em;
 }
 
 a {
@@ -50,8 +48,13 @@ a {
 }
 
 a:hover {
-  color: var(--color-links-hover);
   text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+:focus {
+  outline: var(--color-links) solid 2px;
+  outline-offset: 2px;
 }
 
 hr {
@@ -89,128 +92,38 @@ input:where([type="search"]) {
   border-width: 0;
 }
 
-.container {
-  --gutter: 16px;
-  width: 1024px;
-  max-width: calc(100% - var(--gutter) * 2);
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.remix-app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-height: calc(100vh - env(safe-area-inset-bottom));
-}
-
-.remix-app > * {
-  width: 100%;
-}
-
-.remix-app__header {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.remix-app__header-content {
+.header__container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  margin-top: var(--layout-spacing);
 }
 
-.remix-app__header-home-link {
-  width: 106px;
-  height: 30px;
-  color: var(--color-foreground);
-}
-
-.remix-app__header-nav ul {
-  list-style: none;
+.header__title {
   margin: 0;
+}
+
+.header__nav {
   display: flex;
+  gap: 1rem;
   align-items: center;
-  gap: 1.5em;
 }
 
-.remix-app__header-nav li {
-  font-weight: bold;
+.header__nav-link.active {
+  text-decoration: underline;
 }
 
-.remix-app__main {
-  flex: 1 1 100%;
+.main__container {
+  margin-top: 3rem;
 }
 
-.remix-app__footer {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.remix-app__footer-content {
+.footer__container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-top: auto;
+  font-size: 0.9rem;
 }
 
-.remix__page {
-  --gap: 1rem;
-  --space: 2rem;
-  display: grid;
-  grid-auto-rows: min-content;
-  gap: var(--gap);
-  padding-top: var(--space);
-  padding-bottom: var(--space);
-}
-
-@media print, screen and (min-width: 640px) {
-  .remix__page {
-    --gap: 2rem;
-    grid-auto-rows: unset;
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  .remix__page {
-    --gap: 4rem;
-  }
-}
-
-.remix__page > main > :first-child {
-  margin-top: 0;
-}
-
-.remix__page > main > :last-child {
-  margin-bottom: 0;
-}
-
-.remix__page > aside {
+.footer__copyright {
   margin: 0;
-  padding: 1.5ch 2ch;
-  border: solid 1px var(--color-border);
-  border-radius: 0.5rem;
-}
-
-.remix__page > aside > :first-child {
-  margin-top: 0;
-}
-
-.remix__page > aside > :last-child {
-  margin-bottom: 0;
-}
-
-.remix__form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-}
-
-.remix__form > * {
-  margin-top: 0;
-  margin-bottom: 0;
+  padding-block: 0.5rem;
 }
