@@ -1,12 +1,24 @@
 import { Link, useLoaderData } from "remix"
 import type { LoaderFunction, LinksFunction } from "remix"
 import { Temporal } from "@js-temporal/polyfill"
+import { z } from "zod"
 
 import { db } from "~/utils/db.server"
 import stylesUrl from "~/styles/bookmarks.css"
 
 const relativeTimeFormat = new Intl.RelativeTimeFormat("en", {
   numeric: "auto"
+})
+
+const loaderDataSchema = z.object({
+  bookmarks: z.array(
+    z.object({
+      id: z.number(),
+      url: z.string().url(),
+      description: z.string(),
+      createdAt: z.string() // Not Date, since it is JSON-stringified
+    })
+  )
 })
 
 type LoaderData = {
@@ -41,7 +53,7 @@ export let loader: LoaderFunction = async () => {
 }
 
 export default function Index() {
-  const { bookmarks } = useLoaderData<LoaderData>()
+  const { bookmarks } = loaderDataSchema.parse(useLoaderData())
 
   return (
     <article className="bookmarks__list">
