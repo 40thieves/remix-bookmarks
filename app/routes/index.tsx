@@ -34,7 +34,8 @@ export let loader: LoaderFunction = async () => {
       url: true,
       description: true,
       createdAt: true
-    }
+    },
+    orderBy: { createdAt: "desc" }
   })
   return { bookmarks }
 }
