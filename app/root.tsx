@@ -139,7 +139,7 @@ function Layout({ children }: { children: React.ReactNode }) {
 
       <footer className="footer__container">
         <div>
-          <p className="footer__copyright">&copy; You!</p>
+          <p className="footer__copyright">&copy; Alasdair Smith</p>
         </div>
       </footer>
     </>
