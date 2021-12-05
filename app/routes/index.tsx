@@ -1,8 +1,9 @@
 import { Link, useLoaderData } from "remix"
-import type { LoaderFunction } from "remix"
+import type { LoaderFunction, LinksFunction } from "remix"
 import { Temporal } from "@js-temporal/polyfill"
 
 import { db } from "~/utils/db.server"
+import stylesUrl from "~/styles/bookmarks.css"
 
 const relativeTimeFormat = new Intl.RelativeTimeFormat("en", {
   numeric: "auto"
@@ -15,6 +16,15 @@ type LoaderData = {
     description: string
     createdAt: string // Not Date, since it is JSON-stringified
   }>
+}
+
+export let links: LinksFunction = () => {
+  return [
+    {
+      rel: "stylesheet",
+      href: stylesUrl
+    }
+  ]
 }
 
 export let loader: LoaderFunction = async () => {
@@ -33,13 +43,17 @@ export default function Index() {
   const { bookmarks } = useLoaderData<LoaderData>()
 
   return (
-    <article>
+    <article className="bookmarks__list">
       {bookmarks.map(({ id, url, description, createdAt }) => {
         return (
-          <div key={id}>
-            <a href={url}>{url}</a>
-            <p>{description}</p>
-            <Link to={String(id)}>{daysAgo(createdAt)}</Link>
+          <div key={id} className="bookmark">
+            <a href={url} className="bookmark__link">
+              {url}
+            </a>
+            <p className="bookmark__description">{description}</p>
+            <Link to={String(id)} className="bookmark__created-at">
+              {daysAgo(createdAt)}
+            </Link>
           </div>
         )
       })}

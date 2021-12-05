@@ -38,10 +38,6 @@ body > * {
   margin-top: 2em;
 }
 
-article * + * {
-  margin-top: 1em;
-}
-
 a {
   color: var(--color-links);
   text-decoration: none;
