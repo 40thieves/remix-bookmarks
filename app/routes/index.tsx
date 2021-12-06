@@ -22,15 +22,6 @@ const LoaderData = z.object({
   )
 })
 
-type LoaderData = {
-  bookmarks: Array<{
-    id: number
-    url: string
-    description: string
-    createdAt: string // Not Date, since it is JSON-stringified
-  }>
-}
-
 export let links: LinksFunction = () => {
   return [
     {
@@ -57,7 +48,7 @@ export default function Index() {
   const { bookmarks } = useTypedLoaderData(LoaderData)
 
   return (
-    <article className="bookmarks__list">
+    <main className="bookmarks__list">
       {bookmarks.map(({ id, url, description, createdAt }) => {
         return (
           <div key={id} className="bookmark">
@@ -71,7 +62,7 @@ export default function Index() {
           </div>
         )
       })}
-    </article>
+    </main>
   )
 }
 

@@ -135,7 +135,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         </nav>
       </header>
 
-      <main className="main__container">{children}</main>
+      <div className="main__container">{children}</div>
 
       <footer className="footer__container">
         <div>
