@@ -16,5 +16,5 @@ model Bookmark {
   updatedAt   DateTime @updatedAt
   url         String
   title       String?
-  description String
+  description String?
 }
