@@ -1,4 +1,22 @@
-import { Form } from "remix"
+import { ActionFunction, Form } from "remix"
+import { z } from "zod"
+import { validate, badRequest } from "~/request"
+
+const BookmarkSchema = z.object({
+  url: z.string().min(1).url(),
+  title: z.string(),
+  description: z.string()
+})
+
+export let action: ActionFunction = async ({ request }) => {
+  let { data, errors } = await validate(request, BookmarkSchema)
+
+  if (errors) return badRequest({ errors })
+
+  // TODO
+
+  return data
+}
 
 export default function New() {
   return (
