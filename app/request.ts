@@ -21,15 +21,11 @@ export async function validate<RequestData>(
   let formData = await request.formData()
   let formEntries = Object.fromEntries(formData.entries())
 
-  try {
-    return { data: schema.parse(formEntries) }
-  } catch (error) {
-    if (error instanceof ZodError) {
-      return { errors: error.flatten() }
-    }
+  let validation = schema.safeParse(formEntries)
 
-    throw error
-  }
+  return validation.success
+    ? { data: validation.data }
+    : { errors: validation.error.flatten() }
 }
 
 export function badRequest(body: any) {
