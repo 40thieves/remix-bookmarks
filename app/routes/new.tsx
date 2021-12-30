@@ -29,7 +29,7 @@ export default function New() {
     <Form method="post">
       <div>
         <label htmlFor="url">URL</label>
-        <input type="text" name="url" id="url" {...errors.url?.inputProps} />
+        <input type="url" name="url" id="url" {...errors.url?.inputProps} />
         {errors.url?.errorDisplay}
       </div>
 
