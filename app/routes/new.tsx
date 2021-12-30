@@ -15,19 +15,19 @@ const BookmarkSchema = z.object({
 type ActionData = Validation<z.infer<typeof BookmarkSchema>>
 
 export let action: ActionFunction = async ({ request }) => {
-  let { data, errors } = await validate(request, BookmarkSchema)
+  let validation = await validate(request, BookmarkSchema)
 
-  if (errors) return badRequest({ errors })
+  if ("error" in validation) return badRequest({ error: validation.error })
 
   // TODO
 
-  return data
+  return {}
 }
 
 export default function New() {
   let actionData = useActionData<ActionData>()
 
-  let errors = useValidationErrors(actionData?.errors?.fieldErrors)
+  let errors = useValidationErrors(actionData)
 
   return (
     <Form method="post" className="new__form">
@@ -79,9 +79,11 @@ type ErrorEntries = {
   [k: string]: string[]
 }
 
-function useValidationErrors(errors: ErrorEntries = {}) {
+function useValidationErrors(data?: ActionData) {
+  if (!data || !("error" in data)) return {}
+
   return Object.fromEntries(
-    Object.entries(errors).map(([name, errors]) => {
+    Object.entries(data.error.fieldErrors).map(([name, errors]) => {
       return [
         name,
         {

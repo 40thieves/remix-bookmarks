@@ -1,14 +1,17 @@
 import { json } from "remix"
-import { ZodError, ZodSchema } from "zod"
+import { SafeParseSuccess, ZodSchema } from "zod"
 
-export type Validation<RequestData> = {
-  data?: {
-    [Property in keyof RequestData]?: any
-  }
-  errors?: {
+export type Validation<RequestData> =
+  | SafeParseSuccess<RequestData>
+  | SafeParseErrorFlattened
+
+// Since we need to flatten the SafeParseError (as it goes over a network
+// boundary), we need a modified type
+type SafeParseErrorFlattened = {
+  success: false
+  error: {
     formErrors: string[]
     fieldErrors: {
-      // TODO: it seems like [Property in keyof RequestData]: string[] should work here, but TS doesn't like it. Unsure why
       [k: string]: string[]
     }
   }
@@ -23,9 +26,17 @@ export async function validate<RequestData>(
 
   let validation = schema.safeParse(formEntries)
 
-  return validation.success
-    ? { data: validation.data }
-    : { errors: validation.error.flatten() }
+  // TODO: another potential option here would be to return a badRequest directly. However this means the caller has to catch and return
+  if (validation.success) {
+    return validation
+  } else {
+    return {
+      ...validation,
+      // We need to process the error so that it can be JSONified (as it is
+      // sent over a network boundary), so flatten it
+      error: validation.error.flatten()
+    }
+  }
 }
 
 export function badRequest(body: any) {
