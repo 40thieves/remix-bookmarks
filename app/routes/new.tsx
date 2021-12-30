@@ -30,10 +30,16 @@ export default function New() {
   let errors = useValidationErrors(actionData?.errors?.fieldErrors)
 
   return (
-    <Form method="post">
+    <Form method="post" className="new__form">
       <div>
         <label htmlFor="url">URL</label>
-        <input type="url" name="url" id="url" {...errors.url?.inputProps} />
+        <input
+          type="url"
+          name="url"
+          id="url"
+          className="new__input"
+          {...errors.url?.inputProps}
+        />
         {errors.url?.errorDisplay}
       </div>
 
@@ -45,6 +51,7 @@ export default function New() {
           type="text"
           name="title"
           id="title"
+          className="new__input"
           {...errors.title?.inputProps}
         />
         {errors.title?.errorDisplay}
@@ -54,16 +61,16 @@ export default function New() {
         <label htmlFor="description">
           Description <small>(optional)</small>
         </label>
-        <input
-          type="text"
+        <textarea
           name="description"
           id="description"
+          className="new__input new__input--description"
           {...errors.description?.inputProps}
         />
         {errors.description?.errorDisplay}
       </div>
 
-      <button>Create</button>
+      <button className="new__create">Create</button>
     </Form>
   )
 }

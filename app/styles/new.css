@@ -1,3 +1,17 @@
-input {
+.new__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4);
+}
+
+.new__input {
   width: 100%;
+}
+
+.new__input--description {
+  min-height: var(--size-12);
+}
+
+.new__create {
+  align-self: flex-start;
 }
