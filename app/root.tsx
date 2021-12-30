@@ -17,12 +17,12 @@ import darkStylesUrl from "~/styles/dark.css"
 // https://remix.run/api/app#links
 export let links: LinksFunction = () => {
   return [
-    { rel: "stylesheet", href: globalStylesUrl },
+    { rel: "stylesheet", href: "https://unpkg.com/open-props" },
     {
       rel: "stylesheet",
-      href: darkStylesUrl,
-      media: "(prefers-color-scheme: dark)"
-    }
+      href: "https://unpkg.com/open-props/normalize.min.css"
+    },
+    { rel: "stylesheet", href: globalStylesUrl }
   ]
 }
 
