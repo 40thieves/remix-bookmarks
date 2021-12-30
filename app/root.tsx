@@ -129,18 +129,15 @@ function Layout({ children }: { children: React.ReactNode }) {
         </Link>
 
         <nav aria-label="Main navigation" className="header__nav">
-          <NavLink to="/" className="header__nav-link">
-            Home
-          </NavLink>
+          <Link to="https://alasdairsmith.co.uk">Homepage</Link>
+          <Link to="https://40thiev.es">Blog</Link>
         </nav>
       </header>
 
       <div className="main__container">{children}</div>
 
       <footer className="footer__container">
-        <div>
-          <p className="footer__copyright">&copy; Alasdair Smith</p>
-        </div>
+        <span className="footer__copyright">&copy; Alasdair Smith</span>
       </footer>
     </>
   )
