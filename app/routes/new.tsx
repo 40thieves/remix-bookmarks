@@ -1,6 +1,10 @@
-import { ActionFunction, Form, useActionData } from "remix"
+import { ActionFunction, Form, LinksFunction, useActionData } from "remix"
 import { z } from "zod"
 import { badRequest, validate, Validation } from "~/request"
+
+import stylesUrl from "~/styles/new.css"
+
+export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 
 const BookmarkSchema = z.object({
   url: z.string().min(1).url(),
