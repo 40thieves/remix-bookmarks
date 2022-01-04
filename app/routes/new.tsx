@@ -88,11 +88,7 @@ export default function New() {
   )
 }
 
-type ErrorEntries = {
-  [k: string]: string[]
-}
-
-function useValidationErrors(data?: ActionData) {
+function useValidationErrors(data?: Validation<any>) {
   if (!data || !("error" in data)) return {}
 
   return Object.fromEntries(
