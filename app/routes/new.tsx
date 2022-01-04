@@ -6,10 +6,11 @@ import {
   useActionData
 } from "remix"
 import { z } from "zod"
+
 import { badRequest, validate, Validation } from "~/request"
+import { db } from "~/utils/db.server"
 
 import stylesUrl from "~/styles/new.css"
-import { db } from "~/utils/db.server"
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 
