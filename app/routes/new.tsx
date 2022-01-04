@@ -1,8 +1,15 @@
-import { ActionFunction, Form, LinksFunction, useActionData } from "remix"
+import {
+  ActionFunction,
+  Form,
+  LinksFunction,
+  redirect,
+  useActionData
+} from "remix"
 import { z } from "zod"
 import { badRequest, validate, Validation } from "~/request"
 
 import stylesUrl from "~/styles/new.css"
+import { db } from "~/utils/db.server"
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 
@@ -19,9 +26,15 @@ export let action: ActionFunction = async ({ request }) => {
 
   if ("error" in validation) return badRequest({ error: validation.error })
 
-  // TODO
+  let bookmark = await db.bookmark.create({
+    data: {
+      url: validation.data.url,
+      title: validation.data.title,
+      description: validation.data.description
+    }
+  })
 
-  return {}
+  return redirect(`/${bookmark.id}`)
 }
 
 export default function New() {
