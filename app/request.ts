@@ -26,7 +26,7 @@ export async function validate<RequestData>(
 
   let validation = schema.safeParse(formEntries)
 
-  // TODO: another potential option here would be to return a badRequest directly. However this means the caller has to catch and return
+  // TODO: another potential option here would be to return a badRequest directly. However this still means the caller has manually check and return so it doesn't save much
   if (validation.success) {
     return validation
   } else {
