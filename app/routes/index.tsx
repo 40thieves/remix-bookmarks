@@ -5,7 +5,7 @@ import { Bookmark } from "@prisma/client"
 
 import { db, JsonifyModel } from "~/utils/db.server"
 
-import stylesUrl from "~/styles/bookmarks.css"
+import stylesUrl from "~/styles/list.css"
 
 const relativeTimeFormat = new Intl.RelativeTimeFormat("en", {
   numeric: "auto"
