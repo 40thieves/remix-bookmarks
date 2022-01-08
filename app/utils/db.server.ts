@@ -18,3 +18,16 @@ if (process.env.NODE_ENV === "production") {
 }
 
 export { db }
+
+/**
+ * Utility type that "transforms" an model type into a JSON-ified version of the
+ * model. This allows a model to be safely sent across the network.
+ *
+ * For example, properties with string/number/boolean types are preserved while
+ * a property with a Date type is coerced to a string.
+ */
+export type JsonifyModel<Model> = {
+  [Key in keyof Model]: Model[Key] extends string | number | boolean
+    ? Model[Key]
+    : string
+}

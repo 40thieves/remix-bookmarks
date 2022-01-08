@@ -1,26 +1,21 @@
-import { Link } from "remix"
+import { Link, useLoaderData } from "remix"
 import type { LoaderFunction, LinksFunction } from "remix"
 import { Temporal } from "@js-temporal/polyfill"
-import { z } from "zod"
+import { Bookmark } from "@prisma/client"
 
-import { db } from "~/utils/db.server"
+import { db, JsonifyModel } from "~/utils/db.server"
+
 import stylesUrl from "~/styles/bookmarks.css"
-import { useTypedLoaderData } from "~/utils/use-typed-loader-data"
 
 const relativeTimeFormat = new Intl.RelativeTimeFormat("en", {
   numeric: "auto"
 })
 
-const LoaderData = z.object({
-  bookmarks: z.array(
-    z.object({
-      id: z.number(),
-      url: z.string().url(),
-      description: z.string(),
-      createdAt: z.string() // Not Date, since it is JSON-stringified
-    })
-  )
-})
+type LoaderData = {
+  bookmarks: JsonifyModel<
+    Pick<Bookmark, "id" | "url" | "description" | "createdAt">
+  >[]
+}
 
 export let links: LinksFunction = () => {
   return [
@@ -45,7 +40,7 @@ export let loader: LoaderFunction = async () => {
 }
 
 export default function Index() {
-  const { bookmarks } = useTypedLoaderData(LoaderData)
+  const { bookmarks } = useLoaderData<LoaderData>()
 
   return (
     <main className="bookmarks__list">
