@@ -3,6 +3,7 @@ import {
   Links,
   LiveReload,
   Meta,
+  MetaFunction,
   NavLink,
   Outlet,
   Scripts,
@@ -13,20 +14,20 @@ import type { LinksFunction } from "remix"
 
 import globalStylesUrl from "~/styles/global.css"
 
-// https://remix.run/api/app#links
-export let links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: "https://unpkg.com/open-props" },
-    {
-      rel: "stylesheet",
-      href: "https://unpkg.com/open-props/normalize.min.css"
-    },
-    { rel: "stylesheet", href: globalStylesUrl }
-  ]
-}
+export let meta: MetaFunction = () => ({
+  title: "Bookmarks",
+  description: "A collection of useful links curated by Ali Smith"
+})
 
-// https://remix.run/api/conventions#default-export
-// https://remix.run/api/conventions#route-filenames
+export let links: LinksFunction = () => [
+  { rel: "stylesheet", href: "https://unpkg.com/open-props" },
+  {
+    rel: "stylesheet",
+    href: "https://unpkg.com/open-props/normalize.min.css"
+  },
+  { rel: "stylesheet", href: globalStylesUrl }
+]
+
 export default function App() {
   return (
     <Document>
@@ -37,7 +38,6 @@ export default function App() {
   )
 }
 
-// https://remix.run/docs/en/v1/api/conventions#errorboundary
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
   return (
@@ -57,7 +57,6 @@ export function ErrorBoundary({ error }: { error: Error }) {
   )
 }
 
-// https://remix.run/docs/en/v1/api/conventions#catchboundary
 export function CatchBoundary() {
   let caught = useCatch()
 

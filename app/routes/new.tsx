@@ -2,6 +2,7 @@ import {
   ActionFunction,
   Form,
   LinksFunction,
+  MetaFunction,
   redirect,
   useActionData
 } from "remix"
@@ -11,6 +12,10 @@ import { badRequest, validate, Validation } from "~/request"
 import { db } from "~/utils/db.server"
 
 import stylesUrl from "~/styles/new.css"
+
+export let meta: MetaFunction = () => ({
+  title: `Bookmarks | Create new bookmark`
+})
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 
