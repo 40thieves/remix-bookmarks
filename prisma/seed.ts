@@ -2,11 +2,26 @@ import { PrismaClient } from "@prisma/client"
 let db = new PrismaClient()
 
 async function seed() {
+  await db.user.deleteMany()
   await db.bookmark.deleteMany()
+
+  const user = await db.user.create({
+    data: {
+      username: "ali",
+      // Hashed version of "password" - this is for dev only!
+      passwordHash:
+        "$2b$10$GFcenpdmyPS02S2RLJT/2.mv4ewwEf0iGuJC3VCZz9xPPXPfpGex6"
+    }
+  })
 
   await Promise.all(
     getBookmarks().map((bookmark) => {
-      return db.bookmark.create({ data: bookmark })
+      return db.bookmark.create({
+        data: {
+          userId: user.id,
+          ...bookmark
+        }
+      })
     })
   )
 }
