@@ -1,0 +1,83 @@
+import {
+  ActionFunction,
+  Form,
+  LinksFunction,
+  useActionData,
+  useSearchParams
+} from "remix"
+import { z } from "zod"
+
+import { badRequest, validate, Validation } from "~/request"
+
+import stylesUrl from "~/styles/login.css"
+import { createUserSession, login } from "~/utils/session.server"
+
+export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
+
+const LoginSchema = z.object({
+  username: z.string().min(3),
+  password: z.string().min(8),
+  redirectTo: z.string()
+})
+
+type ActionData = Validation<z.infer<typeof LoginSchema>>
+
+export let action: ActionFunction = async ({ request }) => {
+  let validation = await validate(request, LoginSchema)
+
+  if ("error" in validation) return badRequest({ error: validation.error })
+
+  let user = await login({
+    username: validation.data.username,
+    password: validation.data.password
+  })
+
+  if (!user) {
+    return badRequest({
+      error: { formError: ["Username/password combination is incorrect"] }
+    })
+  }
+
+  return createUserSession(`${user.id}`, validation.data.redirectTo || "/")
+}
+
+export default function Login() {
+  const actionData = useActionData<ActionData>()
+
+  const [searchParams] = useSearchParams()
+
+  return (
+    <main>
+      <h2>Log in</h2>
+      <Form method="post" className="login__form">
+        <div>
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            className="login__input"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            type="text"
+            name="password"
+            id="password"
+            className="login__input"
+          />
+        </div>
+
+        <input
+          type="hidden"
+          name="redirectTo"
+          value={searchParams.get("redirectTo") ?? undefined}
+        />
+
+        <button className="login__submit">Log in</button>
+      </Form>
+    </main>
+  )
+}
