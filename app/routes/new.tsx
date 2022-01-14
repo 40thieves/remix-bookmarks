@@ -13,6 +13,7 @@ import { db } from "~/utils/db.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
 
 import stylesUrl from "~/styles/new.css"
+import { requireUserId } from "~/utils/session.server"
 
 export let meta: MetaFunction = () => ({
   title: `Bookmarks | Create new bookmark`
@@ -29,6 +30,7 @@ const BookmarkSchema = z.object({
 type ActionData = Validation<z.infer<typeof BookmarkSchema>>
 
 export let action: ActionFunction = async ({ request }) => {
+  let userId = await requireUserId(request)
   let validation = await validate(request, BookmarkSchema)
 
   if ("error" in validation) return badRequest({ error: validation.error })
@@ -37,7 +39,8 @@ export let action: ActionFunction = async ({ request }) => {
     data: {
       url: validation.data.url,
       title: validation.data.title,
-      description: validation.data.description
+      description: validation.data.description,
+      userId
     }
   })
 
