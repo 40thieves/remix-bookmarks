@@ -11,6 +11,7 @@ import { badRequest, validate, Validation } from "~/request"
 
 import stylesUrl from "~/styles/login.css"
 import { createUserSession, login } from "~/utils/session.server"
+import { useValidationErrors } from "~/utils/use-validation-errors"
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 
@@ -43,6 +44,7 @@ export let action: ActionFunction = async ({ request }) => {
 
 export default function Login() {
   const actionData = useActionData<ActionData>()
+  let errors = useValidationErrors(actionData)
 
   const [searchParams] = useSearchParams()
 
@@ -57,7 +59,9 @@ export default function Login() {
             name="username"
             id="username"
             className="login__input"
+            {...errors.username?.inputProps}
           />
+          {errors.username?.errorDisplay}
         </div>
 
         <div>
@@ -67,7 +71,9 @@ export default function Login() {
             name="password"
             id="password"
             className="login__input"
+            {...errors.password?.inputProps}
           />
+          {errors.password?.errorDisplay}
         </div>
 
         <input
