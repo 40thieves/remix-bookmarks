@@ -10,10 +10,10 @@ import { z } from "zod"
 
 import { badRequest, validate, Validation } from "~/request"
 import { db } from "~/utils/db.server"
+import { requireUserId } from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
 
 import stylesUrl from "~/styles/new.css"
-import { requireUserId } from "~/utils/session.server"
 
 export let meta: MetaFunction = () => ({
   title: `Bookmarks | Create new bookmark`
