@@ -2,15 +2,19 @@ import {
   Link,
   Links,
   LiveReload,
+  LoaderFunction,
+  LinksFunction,
   Meta,
   MetaFunction,
-  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useCatch
+  useCatch,
+  useLoaderData
 } from "remix"
-import type { LinksFunction } from "remix"
+import { User } from "@prisma/client"
+
+import { getUserId } from "./utils/session.server"
 
 import globalStylesUrl from "~/styles/global.css"
 
@@ -28,10 +32,22 @@ export let links: LinksFunction = () => [
   { rel: "stylesheet", href: globalStylesUrl }
 ]
 
+type LoaderData = {
+  user: User | null
+}
+
+export let loader: LoaderFunction = async ({ request }) => {
+  let user = await getUserId(request)
+
+  return { user }
+}
+
 export default function App() {
+  let loaderData = useLoaderData<LoaderData>()
+
   return (
     <Document>
-      <Layout>
+      <Layout user={loaderData?.user}>
         <Outlet />
       </Layout>
     </Document>
@@ -40,19 +56,17 @@ export default function App() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
+
   return (
     <Document title="Error!">
-      <Layout>
+      {/* Note: we don't render Document here, as it requires user data */}
+      <div className="main__container">
         <div>
           <h1>There was an error</h1>
           <p>{error.message}</p>
           <hr />
-          <p>
-            Hey, developer, you should replace this with what you want your
-            users to see.
-          </p>
         </div>
-      </Layout>
+      </div>
     </Document>
   )
 }
@@ -80,9 +94,11 @@ export function CatchBoundary() {
       throw new Error(caught.data || caught.statusText)
   }
 
+  let loaderData = useLoaderData<LoaderData>()
+
   return (
     <Document title={`${caught.status} ${caught.statusText}`}>
-      <Layout>
+      <Layout user={loaderData?.user}>
         <h1>
           {caught.status}: {caught.statusText}
         </h1>
@@ -118,7 +134,13 @@ function Document({
   )
 }
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Layout({
+  children,
+  user
+}: {
+  children: React.ReactNode
+  user?: User | null
+}) {
   return (
     <>
       <header className="header__container">
@@ -129,6 +151,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         <nav aria-label="Main navigation" className="header__nav">
           <Link to="https://alasdairsmith.co.uk">Homepage</Link>
           <Link to="https://40thiev.es">Blog</Link>
+          {user ? <LogoutForm /> : <Link to="login">Log in</Link>}
         </nav>
       </header>
 
@@ -138,5 +161,15 @@ function Layout({ children }: { children: React.ReactNode }) {
         <span className="footer__copyright">&copy; Alasdair Smith</span>
       </footer>
     </>
+  )
+}
+
+function LogoutForm() {
+  return (
+    <form action="/logout" method="post">
+      <button type="submit" className="btn-link">
+        Log out
+      </button>
+    </form>
   )
 }
