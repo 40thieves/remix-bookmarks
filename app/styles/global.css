@@ -18,6 +18,22 @@ input:where([type="text"], [type="search"], [type="email"], [type="password"], [
   border-width: 0;
 }
 
+.btn-link {
+  padding-inline: var(--size-1);
+  margin-inline: calc(var(--size-1) * -1);
+  padding-block: var(--size-1);
+  margin-block: calc(var(--size-1) * -1);
+
+  background-color: transparent;
+  color: var(--link);
+  /* Seems open-prop's normalize sets this to a specific purple */
+  text-decoration-color: var(--indigo-2);
+}
+
+.btn-link:hover {
+  text-decoration-line: underline;
+}
+
 /*
  * Global layout
  */
