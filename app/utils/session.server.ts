@@ -47,17 +47,8 @@ export async function createUserSession(userId: string, redirectTo: string) {
   })
 }
 
-export function getUserSession(request: Request) {
+function getUserSession(request: Request) {
   return storage.getSession(request.headers.get("Cookie"))
-}
-
-export async function getUserId(request: Request) {
-  let session = await getUserSession(request)
-  let userId = session.get("userId")
-
-  if (!userId || typeof userId !== "string") return null
-
-  return parseInt(userId, 10)
 }
 
 export async function requireUserId(
@@ -73,4 +64,34 @@ export async function requireUserId(
   }
 
   return parseInt(userId, 10)
+}
+
+export async function getUserId(request: Request) {
+  let session = await getUserSession(request)
+  let userId = session.get("userId")
+
+  if (!userId || typeof userId !== "string") return null
+
+  try {
+    let user = await db.user.findUnique({
+      select: { id: true },
+      where: { id: parseInt(userId, 10) }
+    })
+
+    if (!user) return null
+
+    return user.id
+  } catch (error) {
+    throw logout(request)
+  }
+}
+
+export async function logout(request: Request) {
+  let session = await storage.getSession(request.headers.get("Cookie"))
+
+  return redirect("/login", {
+    headers: {
+      "Set-Cookie": await storage.destroySession(session)
+    }
+  })
 }
