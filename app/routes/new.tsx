@@ -11,7 +11,7 @@ import {
 } from "remix"
 import { z } from "zod"
 
-import { validate, Validation } from "~/request"
+import { validate, Validation } from "~/utils/validation"
 import { db } from "~/utils/db.server"
 import {
   requireUserId,
