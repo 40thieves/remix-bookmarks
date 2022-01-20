@@ -54,7 +54,7 @@ export default function New() {
 
   return (
     <main>
-      <h2>Create new bookmark</h2>
+      <h2>Create new bookmark&hellip;</h2>
       <Form method="post" className="new__form">
         <div>
           <label htmlFor="url">URL</label>

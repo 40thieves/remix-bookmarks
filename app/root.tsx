@@ -149,9 +149,14 @@ function Layout({
         </Link>
 
         <nav aria-label="Main navigation" className="header__nav">
-          <Link to="https://alasdairsmith.co.uk">Homepage</Link>
-          <Link to="https://40thiev.es">Blog</Link>
-          {user ? <LogoutForm /> : <Link to="login">Log in</Link>}
+          {user ? (
+            <>
+              <Link to="new">Create new&hellip;</Link>
+              <LogoutForm />
+            </>
+          ) : (
+            <Link to="login">Log in</Link>
+          )}
         </nav>
       </header>
 
