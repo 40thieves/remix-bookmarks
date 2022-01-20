@@ -10,7 +10,7 @@ import { z } from "zod"
 import { validate, Validation } from "~/utils/validation"
 import { createUserSession, login } from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
-import { badRequest } from "~/http-response"
+import { badRequest } from "~/utils/http-response"
 
 import stylesUrl from "~/styles/login.css"
 

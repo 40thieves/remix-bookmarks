@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt"
 import { createCookieSessionStorage, json, redirect } from "remix"
-import { unauthorized } from "~/http-response"
+import { unauthorized } from "~/utils/http-response"
 
 import { db } from "./db.server"
 

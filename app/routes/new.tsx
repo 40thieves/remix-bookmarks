@@ -15,7 +15,7 @@ import { validate, Validation } from "~/utils/validation"
 import { db } from "~/utils/db.server"
 import { requireUserId, preventAnonAccess } from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
-import { badRequest } from "~/http-response"
+import { badRequest } from "~/utils/http-response"
 
 import stylesUrl from "~/styles/new.css"
 
