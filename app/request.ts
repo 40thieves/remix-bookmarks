@@ -1,4 +1,3 @@
-import { json } from "remix"
 import { SafeParseSuccess, ZodSchema } from "zod"
 
 export type Validation<RequestData> =
@@ -37,8 +36,4 @@ export async function validate<RequestData>(
       error: validation.error.flatten()
     }
   }
-}
-
-export function badRequest(body: any) {
-  return json(body, { status: 400 })
 }

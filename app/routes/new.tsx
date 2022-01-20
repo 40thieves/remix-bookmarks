@@ -11,7 +11,7 @@ import {
 } from "remix"
 import { z } from "zod"
 
-import { badRequest, validate, Validation } from "~/request"
+import { validate, Validation } from "~/request"
 import { db } from "~/utils/db.server"
 import {
   requireUserId,
@@ -21,6 +21,7 @@ import {
 import { useValidationErrors } from "~/utils/use-validation-errors"
 
 import stylesUrl from "~/styles/new.css"
+import { badRequest } from "~/http-response"
 
 export let meta: MetaFunction = () => ({
   title: `Bookmarks | Create new bookmark`
