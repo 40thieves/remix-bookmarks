@@ -1,16 +1,23 @@
 import {
   ActionFunction,
   Form,
+  Link,
   LinksFunction,
+  LoaderFunction,
   MetaFunction,
   redirect,
-  useActionData
+  useActionData,
+  useCatch
 } from "remix"
 import { z } from "zod"
 
 import { badRequest, validate, Validation } from "~/request"
 import { db } from "~/utils/db.server"
-import { requireUserId } from "~/utils/session.server"
+import {
+  requireUserId,
+  preventAnonAccess,
+  getUserId
+} from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
 
 import stylesUrl from "~/styles/new.css"
@@ -20,6 +27,12 @@ export let meta: MetaFunction = () => ({
 })
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
+
+export let loader: LoaderFunction = async ({ request }) => {
+  await preventAnonAccess(request)
+
+  return {}
+}
 
 const BookmarkSchema = z.object({
   url: z.string().min(1).url(),

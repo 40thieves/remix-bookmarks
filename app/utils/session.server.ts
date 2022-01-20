@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import { createCookieSessionStorage, redirect } from "remix"
+import { createCookieSessionStorage, json, redirect } from "remix"
 
 import { db } from "./db.server"
 
@@ -64,6 +64,11 @@ export async function requireUserId(
   }
 
   return parseInt(userId, 10)
+}
+
+export async function preventAnonAccess(request: Request) {
+  let userId = await getUserId(request)
+  if (!userId) throw new Response("Unauthorized", { status: 401 })
 }
 
 export async function getUserId(request: Request) {
