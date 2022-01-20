@@ -13,15 +13,11 @@ import { z } from "zod"
 
 import { validate, Validation } from "~/utils/validation"
 import { db } from "~/utils/db.server"
-import {
-  requireUserId,
-  preventAnonAccess,
-  getUserId
-} from "~/utils/session.server"
+import { requireUserId, preventAnonAccess } from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
+import { badRequest } from "~/http-response"
 
 import stylesUrl from "~/styles/new.css"
-import { badRequest } from "~/http-response"
 
 export let meta: MetaFunction = () => ({
   title: `Bookmarks | Create new bookmark`
