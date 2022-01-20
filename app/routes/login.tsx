@@ -67,7 +67,7 @@ export default function Login() {
         <div>
           <label htmlFor="password">Password</label>
           <input
-            type="text"
+            type="password"
             name="password"
             id="password"
             className="login__input"
