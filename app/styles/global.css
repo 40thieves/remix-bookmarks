@@ -34,6 +34,24 @@ input:where([type="text"], [type="search"], [type="email"], [type="password"], [
   text-decoration-line: underline;
 }
 
+.alert--danger {
+  padding: var(--size-4);
+  border-radius: var(--radius-2);
+  background-color: var(--red-2);
+  border: 2px solid var(--red-9);
+  color: var(--red-9);
+}
+
+.alert--danger .alert__link {
+  color: var(--red-9);
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.alert--danger .alert__link:hover {
+  text-decoration: none;
+}
+
 /*
  * Global layout
  */

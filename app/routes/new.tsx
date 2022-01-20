@@ -114,3 +114,18 @@ export default function New() {
     </main>
   )
 }
+
+export function CatchBoundary() {
+  const caught = useCatch()
+
+  if (caught.status === 401) {
+    return (
+      <div className="alert--danger">
+        <p>You must be logged in to create a bookmark.</p>
+        <Link to="/login" className="alert__link">
+          Log in
+        </Link>
+      </div>
+    )
+  }
+}
