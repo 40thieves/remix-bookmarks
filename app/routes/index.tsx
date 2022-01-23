@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from "remix"
+import { Link, ThrownResponse, useCatch, useLoaderData } from "remix"
 import type { LoaderFunction, LinksFunction } from "remix"
 import { Temporal } from "@js-temporal/polyfill"
 import { Bookmark } from "@prisma/client"
@@ -111,4 +111,34 @@ function daysAgo(timestamp: string) {
     .round({ largestUnit: "day", smallestUnit: "day" })
 
   return relativeTimeFormat.format(duration.days, "day")
+}
+
+type CaughtError = ThrownResponse & {
+  error?: string
+}
+
+export function CatchBoundary() {
+  let caught = useCatch<CaughtError>()
+
+  let message
+  switch (caught.status) {
+    case 400:
+      if (caught.data.error === "invalid_page") {
+        message = <p>Oops! That's not a valid page number.</p>
+      } else {
+        message = <p>Oops! Looks like you sent some bad data in a request.</p>
+      }
+      break
+    default:
+      throw new Error(caught.data || caught.statusText)
+  }
+
+  return (
+    <main>
+      <h2>
+        {caught.status}: {caught.statusText}
+      </h2>
+      {message}
+    </main>
+  )
 }

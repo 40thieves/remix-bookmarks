@@ -76,6 +76,9 @@ export function CatchBoundary() {
 
   let message
   switch (caught.status) {
+    case 400:
+      message = <p>Oops! Looks like you sent some bad data in a request.</p>
+      break
     case 401:
       message = (
         <p>
