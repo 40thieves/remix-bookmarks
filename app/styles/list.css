@@ -1,19 +1,19 @@
-.bookmarks__list {
+.list__container {
   display: flex;
   flex-direction: column;
   gap: 1.3rem;
 }
 
-.bookmark {
+.list__item {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 }
 
-.bookmark__description {
+.list__description {
   font-size: 90%;
 }
-.bookmark__created-at {
+.list__created-at {
   font-size: 80%;
 }
 

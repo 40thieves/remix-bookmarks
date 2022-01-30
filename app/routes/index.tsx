@@ -75,15 +75,13 @@ export default function Index() {
   let { bookmarks, pagination } = useLoaderData<LoaderData>()
 
   return (
-    <main className="bookmarks__list">
+    <main className="list__container">
       {bookmarks.map(({ id, url, title, description, createdAt }) => {
         return (
-          <div key={id} className="bookmark">
-            <a href={url} className="bookmark__link">
-              {title || url}
-            </a>
-            <p className="bookmark__description">{description}</p>
-            <Link to={String(id)} className="bookmark__created-at">
+          <div key={id} className="list__item">
+            <a href={url}>{title || url}</a>
+            <p className="list__description">{description}</p>
+            <Link to={String(id)} className="list__created-at">
               {daysAgo(createdAt)}
             </Link>
           </div>
