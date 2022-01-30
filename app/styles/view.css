@@ -1,0 +1,7 @@
+.view__description {
+  margin-block: var(--size-4);
+}
+
+.view__created-at {
+  font-size: 80%;
+}

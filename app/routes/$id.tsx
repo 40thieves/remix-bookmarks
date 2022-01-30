@@ -1,9 +1,18 @@
-import { LoaderFunction, useLoaderData } from "remix"
+import { LinksFunction, LoaderFunction, useLoaderData } from "remix"
 import { Bookmark } from "@prisma/client"
 
 import { db, JsonifyModel } from "~/utils/db.server"
 import { badRequest, notFound } from "~/utils/http-response"
 import { daysAgo } from "~/utils/date"
+
+import stylesUrl from "~/styles/view.css"
+
+export let links: LinksFunction = () => [
+  {
+    rel: "stylesheet",
+    href: stylesUrl
+  }
+]
 
 type LoaderData = {
   bookmark: JsonifyModel<
@@ -40,9 +49,14 @@ export default function BookmarkView() {
 
   return (
     <main>
-      <h2>{title || url}</h2>
-      <p>{description}</p>
-      <time dateTime={createdAt}>{daysAgo(createdAt)}</time>
+      <h2>
+        <a href={url}>{title || url}</a>
+      </h2>
+
+      <p className="view__description">{description}</p>
+      <time dateTime={createdAt} className="view__created-at">
+        {daysAgo(createdAt)}
+      </time>
     </main>
   )
 }

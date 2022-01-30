@@ -8,14 +8,12 @@ import { badRequest } from "~/utils/http-response"
 import stylesUrl from "~/styles/list.css"
 import { daysAgo } from "~/utils/date"
 
-export let links: LinksFunction = () => {
-  return [
-    {
-      rel: "stylesheet",
-      href: stylesUrl
-    }
-  ]
-}
+export let links: LinksFunction = () => [
+  {
+    rel: "stylesheet",
+    href: stylesUrl
+  }
+]
 
 type LoaderData = {
   bookmarks: JsonifyModel<
