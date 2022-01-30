@@ -19,7 +19,7 @@ export let links: LinksFunction = () => {
 
 type LoaderData = {
   bookmarks: JsonifyModel<
-    Pick<Bookmark, "id" | "url" | "description" | "createdAt">
+    Pick<Bookmark, "id" | "url" | "title" | "description" | "createdAt">
   >[]
   pagination: {
     current: number
@@ -48,6 +48,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       select: {
         id: true,
         url: true,
+        title: true,
         description: true,
         createdAt: true
       },
@@ -77,11 +78,11 @@ export default function Index() {
 
   return (
     <main className="bookmarks__list">
-      {bookmarks.map(({ id, url, description, createdAt }) => {
+      {bookmarks.map(({ id, url, title, description, createdAt }) => {
         return (
           <div key={id} className="bookmark">
             <a href={url} className="bookmark__link">
-              {url}
+              {title || url}
             </a>
             <p className="bookmark__description">{description}</p>
             <Link to={String(id)} className="bookmark__created-at">
