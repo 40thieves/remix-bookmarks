@@ -1,12 +1,12 @@
 import { Link, ThrownResponse, useCatch, useLoaderData } from "remix"
 import type { LoaderFunction, LinksFunction } from "remix"
-import { Temporal } from "@js-temporal/polyfill"
 import { Bookmark } from "@prisma/client"
 
 import { db, JsonifyModel } from "~/utils/db.server"
 import { badRequest } from "~/utils/http-response"
 
 import stylesUrl from "~/styles/list.css"
+import { daysAgo } from "~/utils/date"
 
 export let links: LinksFunction = () => {
   return [
@@ -101,19 +101,6 @@ export default function Index() {
       </div>
     </main>
   )
-}
-
-const relativeTimeFormat = new Intl.RelativeTimeFormat("en", {
-  numeric: "auto"
-})
-
-function daysAgo(timestamp: string) {
-  let date = Temporal.Instant.from(timestamp)
-  let duration = date
-    .since(Temporal.Now.instant())
-    .round({ largestUnit: "day", smallestUnit: "day" })
-
-  return relativeTimeFormat.format(duration.days, "day")
 }
 
 type CaughtError = ThrownResponse & {
