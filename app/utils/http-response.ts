@@ -5,5 +5,9 @@ export function badRequest(body: any) {
 }
 
 export function unauthorized() {
-  return new Response("Unauthorized", { status: 401 })
+  return json("Unauthorized", { status: 401 })
+}
+
+export function notFound() {
+  return json("Not Found", { status: 404 })
 }

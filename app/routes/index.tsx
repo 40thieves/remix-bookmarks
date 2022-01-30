@@ -36,7 +36,9 @@ export let loader: LoaderFunction = async ({ request }) => {
   let searchParams = new URL(request.url).searchParams
   let page = parseInt(searchParams.get("page") || "1", 10)
 
-  if (page < 1) throw badRequest({ error: { formError: ["invalid_page"] } })
+  if (Number.isNaN(page) || page < 1) {
+    throw badRequest({ error: "invalid_page" })
+  }
 
   // Offset is zero-indexed page number multiplied by the number of bookmarks per page
   let skip = (page - 1) * PER_PAGE
