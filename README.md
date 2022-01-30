@@ -2,7 +2,7 @@
 
 ## TODO
 
-- [ ] View link page
+- [x] View link page
 - [ ] Improve relative date calculation
 - [ ] Search
 - [ ] RSS
