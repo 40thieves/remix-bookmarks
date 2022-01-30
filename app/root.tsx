@@ -147,9 +147,9 @@ function Layout({
   return (
     <>
       <header className="header__container">
-        <Link to="/">
-          <h1>Bookmarks</h1>
-        </Link>
+        <h1>
+          <Link to="/">Bookmarks</Link>
+        </h1>
 
         <nav aria-label="Main navigation" className="header__nav">
           {user ? (
