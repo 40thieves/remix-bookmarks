@@ -20,7 +20,7 @@ import { badRequest } from "~/utils/http-response"
 import stylesUrl from "~/styles/new.css"
 
 export let meta: MetaFunction = () => ({
-  title: `Bookmarks | Create new bookmark`
+  title: `Create new bookmark | Bookmarks`
 })
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]

@@ -1,4 +1,9 @@
-import { LinksFunction, LoaderFunction, useLoaderData } from "remix"
+import {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+  useLoaderData
+} from "remix"
 import { Bookmark } from "@prisma/client"
 
 import { db, JsonifyModel } from "~/utils/db.server"
@@ -40,6 +45,15 @@ export let loader: LoaderFunction = async ({ params }) => {
   if (!bookmark) throw notFound()
 
   return { bookmark }
+}
+
+export let meta: MetaFunction = ({ data }: { data: LoaderData }) => {
+  let { bookmark } = data
+
+  return {
+    title: `${bookmark.title || bookmark.url} | Bookmarks`,
+    description: bookmark.description
+  }
 }
 
 export default function BookmarkView() {
