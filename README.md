@@ -8,3 +8,4 @@
 - [ ] RSS
 - [ ] Redesign creation - just add a form on the homepage?
 - [ ] Consider extracting business logic out of action functions
+- [ ] Twitter meta tags
