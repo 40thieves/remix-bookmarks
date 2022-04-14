@@ -80,7 +80,9 @@ export default function Index() {
         return (
           <div key={id} className="list__item">
             <a href={url}>{title || url}</a>
-            <p className="list__description">{description}</p>
+            <p className="list__description">
+              {description || <small>No description</small>}
+            </p>
             <Link to={String(id)} className="list__created-at">
               {daysAgo(createdAt)}
             </Link>

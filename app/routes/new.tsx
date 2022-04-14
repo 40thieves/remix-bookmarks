@@ -32,8 +32,8 @@ export let loader: LoaderFunction = async ({ request }) => {
 }
 
 const BookmarkSchema = z.object({
-  url: z.string().min(1).url(),
-  title: z.string(),
+  url: z.string().nonempty().url(),
+  title: z.string().nonempty(),
   description: z.string()
 })
 
@@ -79,9 +79,7 @@ export default function New() {
         </div>
 
         <div>
-          <label htmlFor="title">
-            Title <small>(optional)</small>
-          </label>
+          <label htmlFor="title">Title</label>
           <input
             type="text"
             name="title"

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { Bookmark, PrismaClient } from "@prisma/client"
 let db = new PrismaClient()
 
 async function seed() {
@@ -28,7 +28,7 @@ async function seed() {
 
 seed()
 
-function getBookmarks() {
+function getBookmarks(): Omit<Bookmark, "id" | "userId">[] {
   return [
     {
       url: "https://example.com",
@@ -59,6 +59,13 @@ function getBookmarks() {
       description: "Remix homepage",
       createdAt: new Date("2021-11-22T20:47:00Z"),
       updatedAt: new Date("2021-11-22T20:47:00Z")
+    },
+    {
+      url: "https://google.com",
+      title: "Google",
+      description: null,
+      createdAt: new Date("2022-04-14T21:22:00"),
+      updatedAt: new Date("2022-04-14T21:22:00")
     }
   ]
 }
