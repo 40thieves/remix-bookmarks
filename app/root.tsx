@@ -148,17 +148,23 @@ function Layout({
     <>
       <header className="header__container">
         <h1>
-          <Link to="/">Bookmarks</Link>
+          <Link to="/" prefetch="intent">
+            Bookmarks
+          </Link>
         </h1>
 
         <nav aria-label="Main navigation" className="header__nav">
           {user ? (
             <>
-              <Link to="new">Create new&hellip;</Link>
+              <Link to="new" prefetch="intent">
+                Create new&hellip;
+              </Link>
               <LogoutForm />
             </>
           ) : (
-            <Link to="login">Log in</Link>
+            <Link to="login" prefetch="intent">
+              Log in
+            </Link>
           )}
         </nav>
       </header>

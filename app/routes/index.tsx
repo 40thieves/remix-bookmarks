@@ -83,7 +83,11 @@ export default function Index() {
             <p className="list__description">
               {description || <small>No description</small>}
             </p>
-            <Link to={String(id)} className="list__created-at">
+            <Link
+              to={String(id)}
+              className="list__created-at"
+              prefetch="intent"
+            >
               {timeAgo(createdAt)}
             </Link>
           </div>
@@ -91,10 +95,14 @@ export default function Index() {
       })}
       <div className="pagination__container">
         {pagination.hasPrevious && (
-          <Link to={`.?page=${pagination.previous}`}>Previous</Link>
+          <Link to={`.?page=${pagination.previous}`} prefetch="intent">
+            Previous
+          </Link>
         )}
         {pagination.hasNext && (
-          <Link to={`.?page=${pagination.next}`}>Next</Link>
+          <Link to={`.?page=${pagination.next}`} prefetch="intent">
+            Next
+          </Link>
         )}
       </div>
     </main>
