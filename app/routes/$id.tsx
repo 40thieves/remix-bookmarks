@@ -8,7 +8,7 @@ import { Bookmark } from "@prisma/client"
 
 import { db, JsonifyModel } from "~/utils/db.server"
 import { badRequest, notFound } from "~/utils/http-response"
-import { daysAgo } from "~/utils/date"
+import { timeAgo } from "~/utils/date"
 
 import stylesUrl from "~/styles/view.css"
 
@@ -69,7 +69,7 @@ export default function BookmarkView() {
 
       <p className="view__description">{description}</p>
       <time dateTime={createdAt} className="view__created-at">
-        {daysAgo(createdAt)}
+        {timeAgo(createdAt)}
       </time>
     </main>
   )

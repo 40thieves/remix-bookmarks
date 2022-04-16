@@ -6,7 +6,7 @@ import { db, JsonifyModel } from "~/utils/db.server"
 import { badRequest } from "~/utils/http-response"
 
 import stylesUrl from "~/styles/list.css"
-import { daysAgo } from "~/utils/date"
+import { timeAgo } from "~/utils/date"
 
 export let links: LinksFunction = () => [
   {
@@ -84,7 +84,7 @@ export default function Index() {
               {description || <small>No description</small>}
             </p>
             <Link to={String(id)} className="list__created-at">
-              {daysAgo(createdAt)}
+              {timeAgo(createdAt)}
             </Link>
           </div>
         )

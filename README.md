@@ -4,7 +4,7 @@
 
 - [x] View link page
 - [x] RSS
-- [ ] Improve relative date calculation
+- [x] Improve relative date calculation
 - [ ] Deploy
 - [ ] Search
 - [ ] Redesign creation - just add a form on the homepage?
