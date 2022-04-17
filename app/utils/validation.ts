@@ -9,8 +9,8 @@ export type Validation<RequestData> =
 type SafeParseErrorFlattened = {
   success: false
   error: {
-    formErrors: string[]
-    fieldErrors: {
+    formErrors?: string[]
+    fieldErrors?: {
       [k: string]: string[]
     }
   }

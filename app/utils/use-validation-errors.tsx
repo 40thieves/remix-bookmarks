@@ -1,7 +1,7 @@
 import { Validation } from "~/utils/validation"
 
 export function useValidationErrors(data?: Validation<any>) {
-  if (!data || !("error" in data)) return {}
+  if (!data || !("error" in data) || !data.error.fieldErrors) return {}
 
   return Object.fromEntries(
     Object.entries(data.error.fieldErrors).map(([name, errors]) => {
