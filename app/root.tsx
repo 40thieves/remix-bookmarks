@@ -1,4 +1,4 @@
-import { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node"
 
 import {
   Link,
@@ -9,14 +9,14 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
-  useLoaderData,
-} from "@remix-run/react";
+  useLoaderData
+} from "@remix-run/react"
 
 import { User } from "@prisma/client"
 
 import { getUserId } from "./utils/session.server"
 
-import globalStylesUrl from "~/styles/global.css"
+import globalStylesUrl from "./styles/global.css"
 
 export let meta: MetaFunction = () => ({
   title: "Bookmarks",

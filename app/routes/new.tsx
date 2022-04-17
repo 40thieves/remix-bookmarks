@@ -1,14 +1,20 @@
-import { ActionFunction, LinksFunction, LoaderFunction, MetaFunction, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useCatch } from "@remix-run/react";
+import {
+  ActionFunction,
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+  redirect
+} from "@remix-run/node"
+import { Form, Link, useActionData, useCatch } from "@remix-run/react"
 import { z } from "zod"
 
-import { validate, Validation } from "~/utils/validation"
-import { db } from "~/utils/db.server"
-import { requireUserId, preventAnonAccess } from "~/utils/session.server"
-import { useValidationErrors } from "~/utils/use-validation-errors"
-import { badRequest } from "~/utils/http-response"
+import { validate, Validation } from "../utils/validation"
+import { db } from "../utils/db.server"
+import { requireUserId, preventAnonAccess } from "../utils/session.server"
+import { useValidationErrors } from "../utils/use-validation-errors"
+import { badRequest } from "../utils/http-response"
 
-import stylesUrl from "~/styles/new.css"
+import stylesUrl from "../styles/new.css"
 
 export let meta: MetaFunction = () => ({
   title: `Create new bookmark | Bookmarks`

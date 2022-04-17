@@ -1,12 +1,12 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { Link, ThrownResponse, useCatch, useLoaderData } from "@remix-run/react";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node"
+import { Link, ThrownResponse, useCatch, useLoaderData } from "@remix-run/react"
 import { Bookmark } from "@prisma/client"
 
-import { db, JsonifyModel } from "~/utils/db.server"
-import { badRequest } from "~/utils/http-response"
+import { db, JsonifyModel } from "../utils/db.server"
+import { badRequest } from "../utils/http-response"
 
-import stylesUrl from "~/styles/list.css"
-import { timeAgo } from "~/utils/date"
+import stylesUrl from "../styles/list.css"
+import { timeAgo } from "../utils/date"
 
 export let links: LinksFunction = () => [
   {
