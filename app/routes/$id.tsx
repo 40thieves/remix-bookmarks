@@ -1,9 +1,5 @@
-import {
-  LinksFunction,
-  LoaderFunction,
-  MetaFunction,
-  useLoaderData
-} from "remix"
+import { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { Bookmark } from "@prisma/client"
 
 import { db, JsonifyModel } from "~/utils/db.server"

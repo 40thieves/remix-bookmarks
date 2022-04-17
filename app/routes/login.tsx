@@ -1,10 +1,5 @@
-import {
-  ActionFunction,
-  Form,
-  LinksFunction,
-  useActionData,
-  useSearchParams
-} from "remix"
+import { ActionFunction, LinksFunction } from "@remix-run/node";
+import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { z } from "zod"
 
 import { validate, Validation } from "~/utils/validation"

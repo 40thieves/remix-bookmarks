@@ -1,17 +1,17 @@
+import { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+
 import {
   Link,
   Links,
   LiveReload,
-  LoaderFunction,
-  LinksFunction,
   Meta,
-  MetaFunction,
   Outlet,
   Scripts,
   ScrollRestoration,
   useCatch,
-  useLoaderData
-} from "remix"
+  useLoaderData,
+} from "@remix-run/react";
+
 import { User } from "@prisma/client"
 
 import { getUserId } from "./utils/session.server"

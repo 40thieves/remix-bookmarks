@@ -1,4 +1,4 @@
-import { json } from "remix"
+import { json } from "@remix-run/node";
 
 export function badRequest(body: any) {
   return json(body, { status: 400 })
