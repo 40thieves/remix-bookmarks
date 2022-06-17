@@ -1,4 +1,4 @@
-import { Validation } from "../utils/validation"
+import { Validation } from "~/utils/validation"
 
 export function useValidationErrors(data?: Validation<any>) {
   if (!data || !("error" in data) || !data.error.fieldErrors) return {}

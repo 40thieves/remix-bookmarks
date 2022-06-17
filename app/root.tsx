@@ -14,9 +14,9 @@ import {
 
 import { User } from "@prisma/client"
 
-import { getUserId } from "./utils/session.server"
+import { getUserId } from "~/utils/session.server"
 
-import globalStylesUrl from "./styles/global.css"
+import globalStylesUrl from "~/styles/global.css"
 
 export let meta: MetaFunction = () => ({
   title: "Bookmarks",

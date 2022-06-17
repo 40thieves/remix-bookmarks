@@ -1,5 +1,5 @@
 import type { LoaderFunction } from "@remix-run/node"
-import { db } from "../utils/db.server"
+import { db } from "~/utils/db.server"
 
 function escapeCdata(s: string) {
   return s.replace(/\]\]>/g, "]]]]><![CDATA[>")
