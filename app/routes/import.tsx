@@ -7,6 +7,7 @@ import stylesUrl from "~/styles/import.css"
 import { badRequest } from "~/utils/http-response"
 import { timeAgo } from "~/utils/date"
 import { db } from "~/utils/db.server"
+import { useState } from "react"
 
 export let links: LinksFunction = () => [
   {
@@ -54,6 +55,49 @@ export let loader: LoaderFunction = async ({ request }) => {
   }
 }
 
+export let action: ActionFunction = async ({ request }) => {
+  let userId = await requireUserId(request)
+
+  // TODO: validation?
+
+  let formData = await request.formData()
+
+  // Dirty hack to join import data by the hash id that is stored in the key
+  type ByHashObj = { [key: string]: { [key: string]: string } }
+  let importsByHash = Array.from(formData.entries()).reduce<ByHashObj>(
+    (acc, [key, value]) => {
+      let [hashId, prop] = key.split(":")
+
+      if (!acc[hashId]) {
+        acc[hashId] = {}
+      }
+
+      acc[hashId][prop] = value.toString()
+
+      return acc
+    },
+    {}
+  )
+
+  // Strip hash id as it is not needed
+  let importData = Object.values(importsByHash)
+
+  let imports = importData.map((data) => ({
+    url: data.href,
+    title: data.description,
+    description: data.extended,
+    createdAt: data.time,
+    updatedAt: data.time,
+    userId
+  }))
+
+  await db.bookmark.createMany({
+    data: imports
+  })
+
+  return null
+}
+
 type PinboardBookmark = {
   hash: string
   href: string
@@ -68,31 +112,9 @@ export default function Import() {
   return (
     <main className="import__container">
       <Form method="post" className="import__form">
-        {bookmarks.map(
-          ({ hash, href, description, time }: PinboardBookmark) => {
-            return (
-              <div key={hash} className="import__item">
-                <input
-                  type="checkbox"
-                  className="import__checkbox"
-                  name="foo"
-                  value={hash}
-                />
-                <div className="import__info">
-                  {/* <label htmlFor={}"> */}
-                  <a href={href} className="import__link">
-                    {description || href}
-                  </a>
-                  {/* </label> */}
-                  <p className="import__description">
-                    {description || <small>No description</small>}
-                  </p>
-                  <span className="import__created-at">{timeAgo(time)}</span>
-                </div>
-              </div>
-            )
-          }
-        )}
+        {bookmarks.map((bookmark: PinboardBookmark) => {
+          return <ImportRow bookmark={bookmark} key={bookmark.hash} />
+        })}
         <button type="submit" className="import__button">
           Import selected
         </button>
@@ -110,5 +132,45 @@ export default function Import() {
         )}
       </div>
     </main>
+  )
+}
+
+function ImportRow({ bookmark }: { bookmark: PinboardBookmark }) {
+  let { hash, href, description, extended, time } = bookmark
+
+  let [checked, setChecked] = useState(false)
+
+  return (
+    <div className="import__item">
+      <input
+        type="checkbox"
+        className="import__checkbox"
+        checked={checked}
+        onChange={() => setChecked((c) => !c)}
+      />
+      {checked ? (
+        <>
+          <input type="hidden" name={`${hash}:href`} value={href} />
+          <input
+            type="hidden"
+            name={`${hash}:description`}
+            value={description}
+          />
+          <input type="hidden" name={`${hash}:extended`} value={extended} />
+          <input type="hidden" name={`${hash}:time`} value={time} />
+        </>
+      ) : null}
+      <div className="import__info">
+        {/* <label htmlFor={}"> */}
+        <a href={href} className="import__link">
+          {description || href}
+        </a>
+        {/* </label> */}
+        <p className="import__description">
+          {description || <small>No description</small>}
+        </p>
+        <span className="import__created-at">{timeAgo(time)}</span>
+      </div>
+    </div>
   )
 }
