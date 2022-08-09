@@ -12,8 +12,6 @@ import {
   useLoaderData
 } from "@remix-run/react"
 
-import { User } from "@prisma/client"
-
 import { getUserId } from "~/utils/session.server"
 
 import globalStylesUrl from "~/styles/global.css"
@@ -33,13 +31,13 @@ export let links: LinksFunction = () => [
 ]
 
 type LoaderData = {
-  user: User | null
+  userId: number | null
 }
 
 export let loader: LoaderFunction = async ({ request }) => {
-  let user = await getUserId(request)
+  let userId = await getUserId(request)
 
-  return { user }
+  return { userId }
 }
 
 export default function App() {
@@ -47,7 +45,7 @@ export default function App() {
 
   return (
     <Document>
-      <Layout user={loaderData?.user}>
+      <Layout userId={loaderData?.userId}>
         <Outlet />
       </Layout>
     </Document>
@@ -101,7 +99,7 @@ export function CatchBoundary() {
 
   return (
     <Document title={`${caught.status} ${caught.statusText}`}>
-      <Layout user={loaderData?.user}>
+      <Layout userId={loaderData?.userId}>
         <h1>
           {caught.status}: {caught.statusText}
         </h1>
@@ -139,10 +137,10 @@ function Document({
 
 function Layout({
   children,
-  user
+  userId
 }: {
   children: React.ReactNode
-  user?: User | null
+  userId?: number | null
 }) {
   return (
     <>
@@ -154,7 +152,7 @@ function Layout({
         </h1>
 
         <nav aria-label="Main navigation" className="header__nav">
-          {user ? (
+          {userId ? (
             <>
               <Link to="new" prefetch="intent">
                 Create new&hellip;
