@@ -5,7 +5,7 @@ async function seed() {
   await db.user.deleteMany()
   await db.bookmark.deleteMany()
 
-  const user = await db.user.create({
+  await db.user.create({
     data: {
       username: "ali",
       // Hashed version of "password" - this is for dev only!
@@ -18,7 +18,6 @@ async function seed() {
     getBookmarks().map((bookmark) => {
       return db.bookmark.create({
         data: {
-          userId: user.id,
           ...bookmark
         }
       })

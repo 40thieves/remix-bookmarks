@@ -37,7 +37,7 @@ const BookmarkSchema = z.object({
 type ActionData = Validation<z.infer<typeof BookmarkSchema>>
 
 export let action: ActionFunction = async ({ request }) => {
-  let userId = await requireUserId(request)
+  await requireUserId(request)
   let validation = await validate(request, BookmarkSchema)
 
   if ("error" in validation) return badRequest({ error: validation.error })
@@ -46,8 +46,7 @@ export let action: ActionFunction = async ({ request }) => {
     data: {
       url: validation.data.url,
       title: validation.data.title,
-      description: validation.data.description,
-      userId
+      description: validation.data.description
     }
   })
 
