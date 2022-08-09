@@ -34,7 +34,7 @@ seed()
     await db.$disconnect()
   })
 
-function getBookmarks(): Omit<Bookmark, "id" | "userId">[] {
+function getBookmarks(): Omit<Bookmark, "id" | "userId" | "private">[] {
   return [
     {
       url: "https://example.com",
