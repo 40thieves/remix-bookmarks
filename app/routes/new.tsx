@@ -9,7 +9,7 @@ import { Form, Link, useActionData, useCatch } from "@remix-run/react"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
 
-import { validateForm, Validation } from "~/utils/validation"
+import { validate, Validation } from "~/utils/validation"
 import { db } from "~/utils/db.server"
 import { requireUserId, preventAnonAccess } from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
@@ -41,7 +41,7 @@ type ActionData = Validation<z.infer<typeof BookmarkSchema>>
 export let action: ActionFunction = async ({ request }) => {
   await requireUserId(request)
 
-  let validation = await validateForm(request, BookmarkSchema)
+  let validation = await validate(request, BookmarkSchema)
 
   if ("error" in validation) return badRequest({ error: validation.error })
 

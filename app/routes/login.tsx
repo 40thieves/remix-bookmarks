@@ -2,7 +2,7 @@ import { ActionFunction, LinksFunction } from "@remix-run/node"
 import { Form, useActionData, useSearchParams } from "@remix-run/react"
 import { z } from "zod"
 
-import { validateForm, Validation } from "~/utils/validation"
+import { validate, Validation } from "~/utils/validation"
 import { createUserSession, login } from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
 import { badRequest } from "~/utils/http-response"
@@ -21,7 +21,7 @@ const LoginSchema = zfd.formData({
 type ActionData = Validation<z.infer<typeof LoginSchema>>
 
 export let action: ActionFunction = async ({ request }) => {
-  let validation = await validateForm(request, LoginSchema)
+  let validation = await validate(request, LoginSchema)
 
   if ("error" in validation) return badRequest({ error: validation.error })
 
