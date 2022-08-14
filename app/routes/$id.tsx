@@ -94,7 +94,7 @@ export function CatchBoundary() {
     return (
       <>
         <h1>
-          {caught.status}: {caught.statusText}
+          {caught.status}: {caught.data}
         </h1>
         That bookmark doesn't exist.
       </>
