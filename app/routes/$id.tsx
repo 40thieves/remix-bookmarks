@@ -1,5 +1,5 @@
 import { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { useCatch, useLoaderData } from "@remix-run/react"
 import { Bookmark } from "@prisma/client"
 
 import { db, JsonifyModel } from "~/utils/db.server"
@@ -85,4 +85,20 @@ export default function BookmarkView() {
       </time>
     </main>
   )
+}
+
+export function CatchBoundary() {
+  const caught = useCatch()
+
+  if (caught.status === 404) {
+    return (
+      <>
+        <h1>
+          {caught.status}: {caught.statusText}
+        </h1>
+        That bookmark doesn't exist.
+      </>
+    )
+  }
+  throw new Error(`Unhandled error: ${caught.status}`)
 }
