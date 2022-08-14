@@ -3,7 +3,6 @@ import {
   ZodEffects,
   ZodObject,
   ZodRawShape,
-  ZodSchema,
   ZodTypeAny
 } from "zod"
 
@@ -23,9 +22,15 @@ type SafeParseErrorFlattened = {
   }
 }
 
-export async function validate(
+// Model the type returned by zod-form-data's formData function
+// TODO: zfd doesn't seem to export a useful type at the moment
+type ZodFormDataSchema<T extends ZodRawShape> = ZodEffects<
+  ZodObject<T, "strip", ZodTypeAny>
+>
+
+export async function validate<T extends ZodRawShape>(
   request: Request,
-  schema: ZodEffects<ZodObject<ZodRawShape, "strip", ZodTypeAny>> // TODO: maybe this can be simplified? zod-form-data doesn't seem to export a useful type
+  schema: ZodFormDataSchema<T>
 ) {
   let validation = schema.safeParse(await request.formData())
 
