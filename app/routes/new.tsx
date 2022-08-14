@@ -59,10 +59,10 @@ export default function New() {
   let errors = useValidationErrors(actionData)
 
   return (
-    <main>
+    <main className="new__container">
       <h2>Create new bookmark&hellip;</h2>
       <Form method="post" className="new__form">
-        <div>
+        <fieldset className="new__form-row">
           <label htmlFor="url">URL</label>
           <input
             type="url"
@@ -72,9 +72,9 @@ export default function New() {
             {...errors.url?.inputProps}
           />
           {errors.url?.errorDisplay}
-        </div>
+        </fieldset>
 
-        <div>
+        <fieldset className="new__form-row">
           <label htmlFor="title">Title</label>
           <input
             type="text"
@@ -84,9 +84,9 @@ export default function New() {
             {...errors.title?.inputProps}
           />
           {errors.title?.errorDisplay}
-        </div>
+        </fieldset>
 
-        <div>
+        <fieldset className="new__form-row">
           <label htmlFor="description">
             Description <small>(optional)</small>
           </label>
@@ -97,7 +97,12 @@ export default function New() {
             {...errors.description?.inputProps}
           />
           {errors.description?.errorDisplay}
-        </div>
+        </fieldset>
+
+        <fieldset className="new__form-row new__form-row--inline">
+          <label htmlFor="private">Private?</label>
+          <input type="checkbox" name="private" id="private" />
+        </fieldset>
 
         <button className="new__create">Create</button>
       </Form>
