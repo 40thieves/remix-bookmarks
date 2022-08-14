@@ -2,25 +2,26 @@ import { ActionFunction, LinksFunction } from "@remix-run/node"
 import { Form, useActionData, useSearchParams } from "@remix-run/react"
 import { z } from "zod"
 
-import { validate, Validation } from "~/utils/validation"
+import { validateForm, Validation } from "~/utils/validation"
 import { createUserSession, login } from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
 import { badRequest } from "~/utils/http-response"
 
 import stylesUrl from "~/styles/login.css"
+import { zfd } from "zod-form-data"
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 
-const LoginSchema = z.object({
-  username: z.string().min(3),
-  password: z.string().min(8),
-  redirectTo: z.string()
+const LoginSchema = zfd.formData({
+  username: zfd.text(z.string().min(3)),
+  password: zfd.text(z.string().min(8)),
+  redirectTo: zfd.text()
 })
 
 type ActionData = Validation<z.infer<typeof LoginSchema>>
 
 export let action: ActionFunction = async ({ request }) => {
-  let validation = await validate(request, LoginSchema)
+  let validation = await validateForm(request, LoginSchema)
 
   if ("error" in validation) return badRequest({ error: validation.error })
 
