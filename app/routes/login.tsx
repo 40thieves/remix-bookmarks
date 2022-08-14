@@ -15,7 +15,7 @@ export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 const LoginSchema = zfd.formData({
   username: zfd.text(z.string().min(3)),
   password: zfd.text(z.string().min(8)),
-  redirectTo: zfd.text()
+  redirectTo: zfd.text(z.string().optional())
 })
 
 type ActionData = Validation<z.infer<typeof LoginSchema>>
