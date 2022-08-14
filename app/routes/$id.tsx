@@ -5,6 +5,7 @@ import { Bookmark } from "@prisma/client"
 import { db, JsonifyModel } from "~/utils/db.server"
 import { badRequest, notFound } from "~/utils/http-response"
 import { timeAgo } from "~/utils/date"
+import { getUserId } from "~/utils/session.server"
 
 import stylesUrl from "~/styles/view.css"
 
@@ -15,20 +16,28 @@ export let links: LinksFunction = () => [
   }
 ]
 
-type LoaderData = {
-  bookmark: JsonifyModel<
-    Pick<Bookmark, "id" | "url" | "title" | "description" | "createdAt">
-  >
-}
+type LoaderData =
+  | {
+      bookmark: JsonifyModel<
+        Pick<Bookmark, "id" | "url" | "title" | "description" | "createdAt">
+      >
+    }
+  | undefined
 
-export let loader: LoaderFunction = async ({ params }) => {
+export let loader: LoaderFunction = async ({ request, params }) => {
+  let userId = await getUserId(request)
+
   if (!params.id) throw badRequest({ error: "missing_id" })
 
   let id = parseInt(params.id, 10)
   if (Number.isNaN(id)) throw badRequest({ error: "invalid_id" })
 
-  let bookmark = await db.bookmark.findUnique({
-    where: { id },
+  let bookmark = await db.bookmark.findFirst({
+    where: {
+      id,
+      // If logged in, show private bookmarks, otherwise exclude them
+      private: userId ? undefined : false
+    },
     select: {
       id: true,
       url: true,
@@ -44,6 +53,12 @@ export let loader: LoaderFunction = async ({ params }) => {
 }
 
 export let meta: MetaFunction = ({ data }: { data: LoaderData }) => {
+  if (!data) {
+    return {
+      title: "Bookmark not found | Bookmarks"
+    }
+  }
+
   let { bookmark } = data
 
   return {
@@ -53,9 +68,10 @@ export let meta: MetaFunction = ({ data }: { data: LoaderData }) => {
 }
 
 export default function BookmarkView() {
-  let { bookmark } = useLoaderData<LoaderData>()
+  let loaderData = useLoaderData<LoaderData>()
+  if (!loaderData) return
 
-  let { title, url, description, createdAt } = bookmark
+  let { title, url, description, createdAt } = loaderData.bookmark
 
   return (
     <main>
