@@ -7,8 +7,9 @@ import {
 } from "@remix-run/node"
 import { Form, Link, useActionData, useCatch } from "@remix-run/react"
 import { z } from "zod"
+import { zfd } from "zod-form-data"
 
-import { validate, Validation } from "~/utils/validation"
+import { validateForm, Validation } from "~/utils/validation"
 import { db } from "~/utils/db.server"
 import { requireUserId, preventAnonAccess } from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
@@ -28,17 +29,19 @@ export let loader: LoaderFunction = async ({ request }) => {
   return {}
 }
 
-const BookmarkSchema = z.object({
-  url: z.string().nonempty().url(),
-  title: z.string().nonempty(),
-  description: z.string()
+const BookmarkSchema = zfd.formData({
+  url: zfd.text(z.string().url()),
+  title: zfd.text(),
+  description: zfd.text(z.string().optional()),
+  private: zfd.checkbox()
 })
 
 type ActionData = Validation<z.infer<typeof BookmarkSchema>>
 
 export let action: ActionFunction = async ({ request }) => {
   await requireUserId(request)
-  let validation = await validate(request, BookmarkSchema)
+
+  let validation = await validateForm(request, BookmarkSchema)
 
   if ("error" in validation) return badRequest({ error: validation.error })
 
@@ -46,7 +49,8 @@ export let action: ActionFunction = async ({ request }) => {
     data: {
       url: validation.data.url,
       title: validation.data.title,
-      description: validation.data.description
+      description: validation.data.description,
+      private: validation.data.private
     }
   })
 
