@@ -7,6 +7,7 @@ import { badRequest } from "~/utils/http-response"
 
 import stylesUrl from "~/styles/list.css"
 import { timeAgo } from "~/utils/date"
+import { getUserId } from "~/utils/session.server"
 
 export let links: LinksFunction = () => [
   {
@@ -31,6 +32,8 @@ type LoaderData = {
 const PER_PAGE = 20
 
 export let loader: LoaderFunction = async ({ request }) => {
+  let userId = await getUserId(request)
+
   let searchParams = new URL(request.url).searchParams
   let page = parseInt(searchParams.get("page") || "1", 10)
 
@@ -43,6 +46,10 @@ export let loader: LoaderFunction = async ({ request }) => {
 
   let [bookmarks, totalCount] = await db.$transaction([
     db.bookmark.findMany({
+      where: {
+        // If logged in, show private bookmarks, otherwise exclude them
+        private: userId ? undefined : false
+      },
       select: {
         id: true,
         url: true,
