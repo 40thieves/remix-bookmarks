@@ -193,7 +193,7 @@ function ImportRow({ bookmark }: { bookmark: PinboardBookmark }) {
         <a href={href} className="import__link">
           {description || href}
         </a>
-        <p>{description || <small>No description</small>}</p>
+        <p>{extended || <small>No extended</small>}</p>
         <p>🔒 {shared === "no" ? "true" : "false"}</p>
         <span className="import__created-at">{timeAgo(time)}</span>
       </div>
