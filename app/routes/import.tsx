@@ -17,7 +17,7 @@ export let links: LinksFunction = () => [
 ]
 
 const PER_PAGE = 20
-const TOTAL_PINBOARD_BOOKMARKS = 3812 // Hard coded number of Pinboard bookmarks
+const TOTAL_PINBOARD_BOOKMARKS = 3812 // Hard coded total number of Pinboard bookmarks
 
 export let loader: LoaderFunction = async ({ request }) => {
   await preventAnonAccess(request)
