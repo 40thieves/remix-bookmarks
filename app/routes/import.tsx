@@ -1,7 +1,7 @@
 import { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node"
 import { Form, Link, useLoaderData } from "@remix-run/react"
 
-import { preventAnonAccess, requireUserId } from "~/utils/session.server"
+import { preventAnonAccess } from "~/utils/session.server"
 
 import stylesUrl from "~/styles/import.css"
 import { badRequest } from "~/utils/http-response"
@@ -56,7 +56,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 }
 
 export let action: ActionFunction = async ({ request }) => {
-  let userId = await requireUserId(request)
+  await preventAnonAccess(request)
 
   // TODO: validation?
 
@@ -88,8 +88,7 @@ export let action: ActionFunction = async ({ request }) => {
     description: data.extended,
     private: data.shared === "no" ? true : false,
     createdAt: data.time,
-    updatedAt: data.time,
-    userId
+    updatedAt: data.time
   }))
 
   await db.bookmark.createMany({
