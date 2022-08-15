@@ -1,5 +1,10 @@
-import { ActionFunction, LinksFunction, LoaderFunction } from "@remix-run/node"
-import { Form, Link, useLoaderData } from "@remix-run/react"
+import {
+  ActionFunction,
+  LinksFunction,
+  LoaderFunction,
+  redirect
+} from "@remix-run/node"
+import { Form, Link, useLoaderData, useSearchParams } from "@remix-run/react"
 
 import { preventAnonAccess } from "~/utils/session.server"
 
@@ -66,6 +71,8 @@ export let action: ActionFunction = async ({ request }) => {
   type ByHashObj = { [key: string]: { [key: string]: string } }
   let importsByHash = Array.from(formData.entries()).reduce<ByHashObj>(
     (acc, [key, value]) => {
+      if (!key.includes(":")) return acc
+
       let [hashId, prop] = key.split(":")
 
       if (!acc[hashId]) {
@@ -95,7 +102,10 @@ export let action: ActionFunction = async ({ request }) => {
     data: imports
   })
 
-  return null
+  // Redirect back to the same page
+  let page = formData.get("page") || 1
+  let qs = new URLSearchParams({ page: page.toString() }).toString()
+  return redirect(`/import?${qs}`)
 }
 
 type PinboardBookmark = {
@@ -109,6 +119,7 @@ type PinboardBookmark = {
 
 export default function Import() {
   let { bookmarks, pagination } = useLoaderData()
+  let [searchParams] = useSearchParams()
 
   return (
     <main className="import__container">
@@ -116,6 +127,11 @@ export default function Import() {
         {bookmarks.map((bookmark: PinboardBookmark) => {
           return <ImportRow bookmark={bookmark} key={bookmark.hash} />
         })}
+        <input
+          type="hidden"
+          name="page"
+          value={searchParams.get("page") || 1}
+        />
         <button type="submit" className="import__button">
           Import selected
         </button>
