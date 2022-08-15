@@ -4,7 +4,13 @@ import {
   LoaderFunction,
   redirect
 } from "@remix-run/node"
-import { Form, Link, useLoaderData, useSearchParams } from "@remix-run/react"
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useSearchParams,
+  useTransition
+} from "@remix-run/react"
 
 import { preventAnonAccess } from "~/utils/session.server"
 
@@ -120,6 +126,7 @@ type PinboardBookmark = {
 export default function Import() {
   let { bookmarks, pagination } = useLoaderData()
   let [searchParams] = useSearchParams()
+  let transition = useTransition()
 
   return (
     <main className="import__container">
@@ -132,8 +139,12 @@ export default function Import() {
           name="page"
           value={searchParams.get("page") || 1}
         />
-        <button type="submit" className="import__button">
-          Import selected
+        <button
+          type="submit"
+          className="import__button"
+          disabled={!!transition.submission}
+        >
+          {transition.submission ? "Importing..." : "Import selected bookmarks"}
         </button>
       </Form>
       <div className="pagination__container">
