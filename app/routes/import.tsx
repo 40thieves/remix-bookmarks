@@ -86,6 +86,7 @@ export let action: ActionFunction = async ({ request }) => {
     url: data.href,
     title: data.description,
     description: data.extended,
+    private: data.shared === "no" ? true : false,
     createdAt: data.time,
     updatedAt: data.time,
     userId
@@ -103,6 +104,7 @@ type PinboardBookmark = {
   href: string
   description: string
   extended: string
+  shared: "yes" | "no"
   time: string
 }
 
@@ -136,7 +138,7 @@ export default function Import() {
 }
 
 function ImportRow({ bookmark }: { bookmark: PinboardBookmark }) {
-  let { hash, href, description, extended, time } = bookmark
+  let { hash, href, description, extended, shared, time } = bookmark
 
   let [checked, setChecked] = useState(false)
 
@@ -157,18 +159,16 @@ function ImportRow({ bookmark }: { bookmark: PinboardBookmark }) {
             value={description}
           />
           <input type="hidden" name={`${hash}:extended`} value={extended} />
+          <input type="hidden" name={`${hash}:shared`} value={shared} />
           <input type="hidden" name={`${hash}:time`} value={time} />
         </>
       ) : null}
       <div className="import__info">
-        {/* <label htmlFor={}"> */}
         <a href={href} className="import__link">
           {description || href}
         </a>
-        {/* </label> */}
-        <p className="import__description">
-          {description || <small>No description</small>}
-        </p>
+        <p>{description || <small>No description</small>}</p>
+        <p>🔒 {shared === "no" ? "true" : "false"}</p>
         <span className="import__created-at">{timeAgo(time)}</span>
       </div>
     </div>
