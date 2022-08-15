@@ -25,4 +25,5 @@ model Bookmark {
   url         String
   title       String
   description String?
+  private     Boolean? @default(false)
 }

@@ -1,4 +1,10 @@
-import { SafeParseSuccess, ZodSchema } from "zod"
+import {
+  SafeParseSuccess,
+  ZodEffects,
+  ZodObject,
+  ZodRawShape,
+  ZodTypeAny
+} from "zod"
 
 export type Validation<RequestData> =
   | SafeParseSuccess<RequestData>
@@ -16,14 +22,17 @@ type SafeParseErrorFlattened = {
   }
 }
 
-export async function validate<RequestData>(
-  request: Request,
-  schema: ZodSchema<RequestData>
-): Promise<Validation<RequestData>> {
-  let formData = await request.formData()
-  let formEntries = Object.fromEntries(formData.entries())
+// Model the type returned by zod-form-data's formData function
+// TODO: zfd doesn't seem to export a useful type at the moment
+type ZodFormDataSchema<T extends ZodRawShape> = ZodEffects<
+  ZodObject<T, "strip", ZodTypeAny>
+>
 
-  let validation = schema.safeParse(formEntries)
+export async function validate<T extends ZodRawShape>(
+  request: Request,
+  schema: ZodFormDataSchema<T>
+) {
+  let validation = schema.safeParse(await request.formData())
 
   // TODO: another potential option here would be to return a badRequest directly. However this still means the caller has manually check and return so it doesn't save much
   if (validation.success) {

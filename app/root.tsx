@@ -56,7 +56,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
 
   return (
-    <Document title="Error!">
+    <Document title="Error! | Bookmarks">
       {/* Note: we don't render Document here, as it requires user data */}
       <div className="main__container">
         <div>
@@ -98,10 +98,10 @@ export function CatchBoundary() {
   let loaderData = useLoaderData<LoaderData>()
 
   return (
-    <Document title={`${caught.status} ${caught.statusText}`}>
+    <Document title={`${caught.status}: ${caught.data} | Bookmarks`}>
       <Layout userId={loaderData?.userId}>
         <h1>
-          {caught.status}: {caught.statusText}
+          {caught.status}: {caught.data}
         </h1>
         {message}
       </Layout>

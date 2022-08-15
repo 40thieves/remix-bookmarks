@@ -7,6 +7,7 @@ import {
 } from "@remix-run/node"
 import { Form, Link, useActionData, useCatch } from "@remix-run/react"
 import { z } from "zod"
+import { zfd } from "zod-form-data"
 
 import { validate, Validation } from "~/utils/validation"
 import { db } from "~/utils/db.server"
@@ -28,16 +29,18 @@ export let loader: LoaderFunction = async ({ request }) => {
   return {}
 }
 
-const BookmarkSchema = z.object({
-  url: z.string().nonempty().url(),
-  title: z.string().nonempty(),
-  description: z.string()
+const BookmarkSchema = zfd.formData({
+  url: zfd.text(z.string().url()),
+  title: zfd.text(),
+  description: zfd.text(z.string().optional()),
+  private: zfd.checkbox()
 })
 
 type ActionData = Validation<z.infer<typeof BookmarkSchema>>
 
 export let action: ActionFunction = async ({ request }) => {
   await requireUserId(request)
+
   let validation = await validate(request, BookmarkSchema)
 
   if ("error" in validation) return badRequest({ error: validation.error })
@@ -46,7 +49,8 @@ export let action: ActionFunction = async ({ request }) => {
     data: {
       url: validation.data.url,
       title: validation.data.title,
-      description: validation.data.description
+      description: validation.data.description,
+      private: validation.data.private
     }
   })
 
@@ -59,10 +63,10 @@ export default function New() {
   let errors = useValidationErrors(actionData)
 
   return (
-    <main>
+    <main className="new__container">
       <h2>Create new bookmark&hellip;</h2>
       <Form method="post" className="new__form">
-        <div>
+        <fieldset className="new__form-row">
           <label htmlFor="url">URL</label>
           <input
             type="url"
@@ -72,9 +76,9 @@ export default function New() {
             {...errors.url?.inputProps}
           />
           {errors.url?.errorDisplay}
-        </div>
+        </fieldset>
 
-        <div>
+        <fieldset className="new__form-row">
           <label htmlFor="title">Title</label>
           <input
             type="text"
@@ -84,9 +88,9 @@ export default function New() {
             {...errors.title?.inputProps}
           />
           {errors.title?.errorDisplay}
-        </div>
+        </fieldset>
 
-        <div>
+        <fieldset className="new__form-row">
           <label htmlFor="description">
             Description <small>(optional)</small>
           </label>
@@ -97,7 +101,12 @@ export default function New() {
             {...errors.description?.inputProps}
           />
           {errors.description?.errorDisplay}
-        </div>
+        </fieldset>
+
+        <fieldset className="new__form-row new__form-row--inline">
+          <label htmlFor="private">Private?</label>
+          <input type="checkbox" name="private" id="private" />
+        </fieldset>
 
         <button className="new__create">Create</button>
       </Form>

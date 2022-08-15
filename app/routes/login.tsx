@@ -8,13 +8,14 @@ import { useValidationErrors } from "~/utils/use-validation-errors"
 import { badRequest } from "~/utils/http-response"
 
 import stylesUrl from "~/styles/login.css"
+import { zfd } from "zod-form-data"
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 
-const LoginSchema = z.object({
-  username: z.string().min(3),
-  password: z.string().min(8),
-  redirectTo: z.string()
+const LoginSchema = zfd.formData({
+  username: zfd.text(z.string().min(3)),
+  password: zfd.text(z.string().min(8)),
+  redirectTo: zfd.text(z.string().optional())
 })
 
 type ActionData = Validation<z.infer<typeof LoginSchema>>
