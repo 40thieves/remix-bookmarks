@@ -1,9 +1,12 @@
-# fly.toml file generated for remix-bookmarks on 2023-03-03T20:58:33Z
+# fly.toml file generated for remix-bookmarks on 2023-03-05T14:14:12Z
 
 app = "remix-bookmarks"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
+
+[deploy]
+  release_command = "npx prisma migrate deploy"
 
 [env]
   PORT = "8080"
@@ -36,6 +39,3 @@ processes = []
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
-
-[deploy]
-  release_command = "npx prisma migrate deploy"
