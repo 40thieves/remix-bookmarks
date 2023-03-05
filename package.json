@@ -15,9 +15,7 @@
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.1",
-    "@netlify/functions": "^1.0.0",
     "@prisma/client": "^3.6.0",
-    "@remix-run/netlify": "^1.6.0",
     "@remix-run/node": "^1.6.0",
     "@remix-run/react": "^1.6.0",
     "@remix-run/serve": "^1.6.0",
