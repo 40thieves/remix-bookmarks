@@ -16,10 +16,12 @@ import { getUserId } from "~/utils/session.server"
 
 import globalStylesUrl from "~/styles/global.css"
 
-export let meta: MetaFunction = () => ({
-  title: "Bookmarks",
-  description: "A collection of useful links curated by Ali Smith"
-})
+export function meta() {
+  return [
+    { title: "Bookmarks" },
+    { description: "A collection of useful links curated by Ali Smith" }
+  ]
+}
 
 export let links: LinksFunction = () => [
   { rel: "stylesheet", href: "https://unpkg.com/open-props" },

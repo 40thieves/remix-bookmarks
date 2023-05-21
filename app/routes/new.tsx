@@ -17,9 +17,9 @@ import { badRequest } from "~/utils/http-response"
 
 import stylesUrl from "~/styles/new.css"
 
-export let meta: MetaFunction = () => ({
-  title: `Create new bookmark | Bookmarks`
-})
+export function meta() {
+  return [{ title: `Create new bookmark | Bookmarks` }]
+}
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 

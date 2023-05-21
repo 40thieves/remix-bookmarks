@@ -52,19 +52,17 @@ export let loader: LoaderFunction = async ({ request, params }) => {
   return { bookmark }
 }
 
-export let meta: MetaFunction = ({ data }: { data: LoaderData }) => {
+export function meta({ data }: { data: LoaderData }) {
   if (!data) {
-    return {
-      title: "Bookmark not found | Bookmarks"
-    }
+    return [{ title: "Bookmark not found | Bookmarks" }]
   }
 
   let { bookmark } = data
 
-  return {
-    title: `${bookmark.title || bookmark.url} | Bookmarks`,
-    description: bookmark.description
-  }
+  return [
+    { title: `${bookmark.title || bookmark.url} | Bookmarks` },
+    { description: bookmark.description }
+  ]
 }
 
 export default function BookmarkView() {
