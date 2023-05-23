@@ -5,6 +5,7 @@ import {
   ZodRawShape,
   ZodTypeAny
 } from "zod"
+import { type ValidationError } from "./errors"
 
 export type Validation<RequestData> =
   | SafeParseSuccess<RequestData>
@@ -14,12 +15,7 @@ export type Validation<RequestData> =
 // boundary), we need a modified type
 type SafeParseErrorFlattened = {
   success: false
-  error: {
-    formErrors?: string[]
-    fieldErrors?: {
-      [k: string]: string[]
-    }
-  }
+  error: ValidationError
 }
 
 // Model the type returned by zod-form-data's formData function

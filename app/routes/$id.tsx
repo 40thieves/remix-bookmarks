@@ -1,11 +1,12 @@
-import { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node"
-import { useCatch, useLoaderData } from "@remix-run/react"
+import { type LinksFunction, type LoaderFunction } from "@remix-run/node"
+import { useLoaderData, useRouteError } from "@remix-run/react"
 import { Bookmark } from "@prisma/client"
 
 import { db, JsonifyModel } from "~/utils/db.server"
 import { badRequest, notFound } from "~/utils/http-response"
 import { timeAgo } from "~/utils/date"
 import { getUserId } from "~/utils/session.server"
+import { ErrorDisplay } from "~/utils/errors"
 
 import stylesUrl from "~/styles/view.css"
 
@@ -27,10 +28,14 @@ type LoaderData =
 export let loader: LoaderFunction = async ({ request, params }) => {
   let userId = await getUserId(request)
 
-  if (!params.id) throw badRequest({ error: "missing_id" })
+  if (!params.id) {
+    throw badRequest({ code: "missing_id", message: "Id is missing" })
+  }
 
   let id = parseInt(params.id, 10)
-  if (Number.isNaN(id)) throw badRequest({ error: "invalid_id" })
+  if (Number.isNaN(id)) {
+    throw badRequest({ code: "invalid_id", message: "Id is invalid" })
+  }
 
   let bookmark = await db.bookmark.findFirst({
     where: {
@@ -47,7 +52,12 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     }
   })
 
-  if (!bookmark) throw notFound()
+  if (!bookmark) {
+    throw notFound({
+      code: "bookmark_not_found",
+      message: "Bookmark not found"
+    })
+  }
 
   return { bookmark }
 }
@@ -85,18 +95,7 @@ export default function BookmarkView() {
   )
 }
 
-export function CatchBoundary() {
-  const caught = useCatch()
-
-  if (caught.status === 404) {
-    return (
-      <>
-        <h1>
-          {caught.status}: {caught.data}
-        </h1>
-        That bookmark doesn't exist.
-      </>
-    )
-  }
-  throw new Error(`Unhandled error: ${caught.status}`)
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorDisplay error={error} />
 }
