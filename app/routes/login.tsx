@@ -23,7 +23,7 @@ type ActionData = Validation<z.infer<typeof LoginSchema>>
 export let action: ActionFunction = async ({ request }) => {
   let validation = await validate(request, LoginSchema)
 
-  if ("error" in validation) return badRequest({ error: validation.error })
+  if ("error" in validation) return badRequest(validation.error)
 
   let user = await login({
     username: validation.data.username,
@@ -32,7 +32,7 @@ export let action: ActionFunction = async ({ request }) => {
 
   if (!user) {
     return badRequest({
-      error: { formError: ["Username/password combination is incorrect"] }
+      formErrors: ["Username/password combination is incorrect"]
     })
   }
 
@@ -56,9 +56,9 @@ export default function Login() {
             name="username"
             id="username"
             className="login__input"
-            {...errors.username?.inputProps}
+            {...errors.fieldErrors?.username?.inputProps}
           />
-          {errors.username?.errorDisplay}
+          {errors.fieldErrors?.username?.errorDisplay}
         </div>
 
         <div>
@@ -68,9 +68,9 @@ export default function Login() {
             name="password"
             id="password"
             className="login__input"
-            {...errors.password?.inputProps}
+            {...errors.fieldErrors?.password?.inputProps}
           />
-          {errors.password?.errorDisplay}
+          {errors.fieldErrors?.password?.errorDisplay}
         </div>
 
         <input
@@ -78,6 +78,8 @@ export default function Login() {
           name="redirectTo"
           value={searchParams.get("redirectTo") ?? undefined}
         />
+
+        {errors.formErrors || null}
 
         <button className="login__submit">Log in</button>
       </Form>

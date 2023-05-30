@@ -73,9 +73,9 @@ export default function New() {
             name="url"
             id="url"
             className="new__input"
-            {...errors.url?.inputProps}
+            {...errors.fieldErrors?.url?.inputProps}
           />
-          {errors.url?.errorDisplay}
+          {errors.fieldErrors?.url?.errorDisplay}
         </fieldset>
 
         <fieldset className="new__form-row">
@@ -85,9 +85,9 @@ export default function New() {
             name="title"
             id="title"
             className="new__input"
-            {...errors.title?.inputProps}
+            {...errors.fieldErrors?.title?.inputProps}
           />
-          {errors.title?.errorDisplay}
+          {errors.fieldErrors?.title?.errorDisplay}
         </fieldset>
 
         <fieldset className="new__form-row">
@@ -98,15 +98,17 @@ export default function New() {
             name="description"
             id="description"
             className="new__input new__input--description"
-            {...errors.description?.inputProps}
+            {...errors.fieldErrors?.description?.inputProps}
           />
-          {errors.description?.errorDisplay}
+          {errors.fieldErrors?.description?.errorDisplay}
         </fieldset>
 
         <fieldset className="new__form-row new__form-row--inline">
           <label htmlFor="private">Private?</label>
           <input type="checkbox" name="private" id="private" />
         </fieldset>
+
+        {errors.formErrors || null}
 
         <button className="new__create">Create</button>
       </Form>
