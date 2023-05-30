@@ -80,6 +80,7 @@ export default function Login() {
         />
 
         {errors.formErrors || null}
+        {errors.announcement}
 
         <button className="login__submit">Log in</button>
       </Form>

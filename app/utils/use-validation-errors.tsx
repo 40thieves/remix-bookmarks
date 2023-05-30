@@ -1,37 +1,17 @@
 import { type Validation } from "~/utils/validation"
-
-interface FormattedValidationErrors {
-  fieldErrors?: {
-    [k: string]: {
-      inputProps: {
-        "aria-invalid": boolean
-        "aria-describedby": string
-      }
-      errorDisplay: JSX.Element
-    }
-  }
-  formErrors?: JSX.Element
-}
+import { ValidationError } from "./errors"
 
 export function useValidationErrors(data?: Validation<any>) {
   if (!data || !("error" in data)) return {}
 
-  let validationErrors: FormattedValidationErrors = {}
-
-  if (data.error.fieldErrors) {
-    validationErrors.fieldErrors = formatFieldErrors(data.error.fieldErrors)
+  return {
+    fieldErrors: formatFieldErrors(data.error.fieldErrors),
+    formErrors: <FormErrors formErrors={data.error.formErrors} />,
+    announcement: <Announcement errors={data.error} />
   }
-
-  if (data.error.formErrors) {
-    validationErrors.formErrors = (
-      <FormErrors formErrors={data.error.formErrors} />
-    )
-  }
-
-  return validationErrors
 }
 
-function formatFieldErrors(fieldErrors: { [k: string]: string[] }) {
+function formatFieldErrors(fieldErrors: { [k: string]: string[] } = {}) {
   return Object.fromEntries(
     Object.entries(fieldErrors).map(([name, errors]) => {
       return [
@@ -54,7 +34,9 @@ function formatFieldErrors(fieldErrors: { [k: string]: string[] }) {
   )
 }
 
-function FormErrors({ formErrors }: { formErrors: string[] }) {
+function FormErrors({ formErrors }: { formErrors?: string[] }) {
+  if (!formErrors) return null
+
   return (
     <div role="alert">
       <ul>
@@ -62,6 +44,14 @@ function FormErrors({ formErrors }: { formErrors: string[] }) {
           return <li key={error}>{error}</li>
         })}
       </ul>
+    </div>
+  )
+}
+
+function Announcement({ errors }: { errors: ValidationError }) {
+  return (
+    <div aria-live="assertive" className="sr-only">
+      {errors.fieldErrors || errors.formErrors ? "Form is invalid" : null}
     </div>
   )
 }

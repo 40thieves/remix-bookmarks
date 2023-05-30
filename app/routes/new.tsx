@@ -109,6 +109,7 @@ export default function New() {
         </fieldset>
 
         {errors.formErrors || null}
+        {errors.announcement}
 
         <button className="new__create">Create</button>
       </Form>
