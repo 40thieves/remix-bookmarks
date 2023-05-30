@@ -8,18 +8,22 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useCatch,
-  useLoaderData
+  isRouteErrorResponse,
+  useLoaderData,
+  useRouteError
 } from "@remix-run/react"
 
 import { getUserId } from "~/utils/session.server"
 
 import globalStylesUrl from "~/styles/global.css"
+import { ErrorDisplay, getErrorMessage, getStatusText } from "./utils/errors"
 
-export let meta: MetaFunction = () => ({
-  title: "Bookmarks",
-  description: "A collection of useful links curated by Ali Smith"
-})
+export function meta() {
+  return [
+    { title: "Bookmarks" },
+    { description: "A collection of useful links curated by Ali Smith" }
+  ]
+}
 
 export let links: LinksFunction = () => [
   { rel: "stylesheet", href: "https://unpkg.com/open-props" },
@@ -52,59 +56,27 @@ export default function App() {
   )
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
+export function ErrorBoundary() {
+  const error = useRouteError()
+  console.log(error)
 
-  return (
-    <Document title="Error! | Bookmarks">
-      {/* Note: we don't render Document here, as it requires user data */}
-      <div className="main__container">
-        <div>
-          <h1>There was an error</h1>
-          <p>{error.message}</p>
-          <hr />
+  if (isRouteErrorResponse(error)) {
+    let statusText = getStatusText(error)
+
+    return (
+      <Document title={`Error: ${statusText} | Bookmarks`}>
+        <div className="main__container">
+          <ErrorDisplay error={error} />
         </div>
-      </div>
-    </Document>
-  )
-}
-
-export function CatchBoundary() {
-  let caught = useCatch()
-
-  let message
-  switch (caught.status) {
-    case 400:
-      message = <p>Oops! Looks like you sent some bad data in a request.</p>
-      break
-    case 401:
-      message = (
-        <p>
-          Oops! Looks like you tried to visit a page that you do not have access
-          to.
-        </p>
-      )
-      break
-    case 404:
-      message = (
-        <p>Oops! Looks like you tried to visit a page that does not exist.</p>
-      )
-      break
-
-    default:
-      throw new Error(caught.data || caught.statusText)
+      </Document>
+    )
   }
 
-  let loaderData = useLoaderData<LoaderData>()
-
   return (
-    <Document title={`${caught.status}: ${caught.data} | Bookmarks`}>
-      <Layout userId={loaderData?.userId}>
-        <h1>
-          {caught.status}: {caught.data}
-        </h1>
-        {message}
-      </Layout>
+    <Document title="Error | Bookmarks">
+      <div className="main__container">
+        <ErrorDisplay error={error} />
+      </div>
     </Document>
   )
 }

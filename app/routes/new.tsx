@@ -2,10 +2,9 @@ import {
   ActionFunction,
   LinksFunction,
   LoaderFunction,
-  MetaFunction,
   redirect
 } from "@remix-run/node"
-import { Form, Link, useActionData, useCatch } from "@remix-run/react"
+import { Form, useActionData, useRouteError } from "@remix-run/react"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
 
@@ -14,12 +13,13 @@ import { db } from "~/utils/db.server"
 import { requireUserId, preventAnonAccess } from "~/utils/session.server"
 import { useValidationErrors } from "~/utils/use-validation-errors"
 import { badRequest } from "~/utils/http-response"
+import { ErrorDisplay } from "~/utils/errors"
 
 import stylesUrl from "~/styles/new.css"
 
-export let meta: MetaFunction = () => ({
-  title: `Create new bookmark | Bookmarks`
-})
+export function meta() {
+  return [{ title: `Create new bookmark | Bookmarks` }]
+}
 
 export let links: LinksFunction = () => [{ rel: "stylesheet", href: stylesUrl }]
 
@@ -43,7 +43,7 @@ export let action: ActionFunction = async ({ request }) => {
 
   let validation = await validate(request, BookmarkSchema)
 
-  if ("error" in validation) return badRequest({ error: validation.error })
+  if ("error" in validation) return badRequest(validation.error)
 
   let bookmark = await db.bookmark.create({
     data: {
@@ -114,17 +114,7 @@ export default function New() {
   )
 }
 
-export function CatchBoundary() {
-  const caught = useCatch()
-
-  if (caught.status === 401) {
-    return (
-      <div className="alert--danger">
-        <p>You must be logged in to create a bookmark.</p>
-        <Link to="/login" className="alert__link">
-          Log in
-        </Link>
-      </div>
-    )
-  }
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorDisplay error={error} />
 }

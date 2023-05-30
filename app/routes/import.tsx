@@ -9,7 +9,7 @@ import {
   Link,
   useLoaderData,
   useSearchParams,
-  useTransition
+  useNavigation
 } from "@remix-run/react"
 import { useState } from "react"
 
@@ -126,7 +126,7 @@ type PinboardBookmark = {
 export default function Import() {
   let { bookmarks, pagination } = useLoaderData()
   let [searchParams] = useSearchParams()
-  let transition = useTransition()
+  let navigation = useNavigation()
 
   return (
     <main className="import__container">
@@ -142,9 +142,9 @@ export default function Import() {
         <button
           type="submit"
           className="import__button"
-          disabled={!!transition.submission}
+          disabled={!!navigation.formData}
         >
-          {transition.submission ? "Importing..." : "Import selected bookmarks"}
+          {navigation.formData ? "Importing..." : "Import selected bookmarks"}
         </button>
       </Form>
       <div className="pagination__container">

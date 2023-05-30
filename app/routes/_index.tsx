@@ -1,13 +1,15 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node"
-import { Link, ThrownResponse, useCatch, useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData, useRouteError } from "@remix-run/react"
 import { Bookmark } from "@prisma/client"
 
 import { db, JsonifyModel } from "~/utils/db.server"
 import { badRequest } from "~/utils/http-response"
 
-import stylesUrl from "~/styles/list.css"
 import { timeAgo } from "~/utils/date"
 import { getUserId } from "~/utils/session.server"
+import { ErrorDisplay } from "~/utils/errors"
+
+import stylesUrl from "~/styles/list.css"
 
 export let links: LinksFunction = () => [
   {
@@ -38,7 +40,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   let page = parseInt(searchParams.get("page") || "1", 10)
 
   if (Number.isNaN(page) || page < 1) {
-    throw badRequest({ error: "invalid_page" })
+    throw badRequest({ code: "invalid_page", message: "Invalid page number" })
   }
 
   // Offset is zero-indexed page number multiplied by the number of bookmarks per page
@@ -116,32 +118,7 @@ export default function Index() {
   )
 }
 
-type CaughtError = ThrownResponse & {
-  error?: string
-}
-
-export function CatchBoundary() {
-  let caught = useCatch<CaughtError>()
-
-  let message
-  switch (caught.status) {
-    case 400:
-      if (caught.data.error === "invalid_page") {
-        message = <p>Oops! That's not a valid page number.</p>
-      } else {
-        message = <p>Oops! Looks like you sent some bad data in a request.</p>
-      }
-      break
-    default:
-      throw new Error(caught.data || caught.statusText)
-  }
-
-  return (
-    <main>
-      <h2>
-        {caught.status}: {caught.statusText}
-      </h2>
-      {message}
-    </main>
-  )
+export function ErrorBoundary() {
+  let error = useRouteError()
+  return <ErrorDisplay error={error} />
 }
