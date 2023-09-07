@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
   let protocol = host.includes("localhost") ? "http" : "https"
   let domain = `${protocol}://${host}`
-  let bookmarksUrl = `${domain}/jokes`
+  let bookmarksUrl = `${domain}`
 
   const rssString = `
     <rss xmlns:blogChannel="${bookmarksUrl}" version="2.0">
