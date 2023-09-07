@@ -4,6 +4,7 @@
 module.exports = {
   ignoredRouteFiles: [".*"],
   serverModuleFormat: "cjs",
+  serverDependenciesToBundle: ["@js-temporal/polyfill"],
   future: {
     v2_routeConvention: true,
     v2_meta: true,
