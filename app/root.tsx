@@ -1,4 +1,4 @@
-import { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node"
+import { LinksFunction, LoaderFunction } from "@remix-run/node"
 
 import {
   Link,
@@ -16,7 +16,7 @@ import {
 import { getUserId } from "~/utils/session.server"
 
 import globalStylesUrl from "~/styles/global.css"
-import { ErrorDisplay, getErrorMessage, getStatusText } from "./utils/errors"
+import { ErrorDisplay, getStatusText } from "./utils/errors"
 
 export function meta() {
   return [
