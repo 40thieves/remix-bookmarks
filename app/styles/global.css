@@ -1,3 +1,54 @@
+@font-face {
+  font-family: "iA Writer Duospace";
+  src: url("../../public/ia-writer-duo.ttf") format("truetype-variations");
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("../../public/manrope.ttf") format("truetype-variations");
+}
+
+:root {
+  --font-sans: Manrope;
+  --font-monospace: "iA Writer Duospace";
+}
+
+html {
+  font-family: var(--font-monospace);
+}
+
+:where(h1, h2, h3, h4, h4, h6) {
+  font-family: var(--font-sans);
+}
+
+h1 {
+  font-size: 4.209rem;
+}
+
+h2 {
+  font-size: 3.157rem;
+}
+
+h3 {
+  font-size: 2.369rem;
+}
+
+h4 {
+  font-size: 1.777rem;
+}
+
+h5 {
+  font-size: 1.333rem;
+}
+
+small {
+  font-size: 0.75rem;
+}
+
+.flow > * + * {
+  margin-block-start: var(--flow-space, 1em);
+}
+
 /*
  * Utilities
  */
@@ -72,6 +123,7 @@ body > * {
   display: flex;
   justify-content: space-between;
   margin-top: var(--size-2);
+  font-family: var(--font-sans);
 }
 
 .header__title {
