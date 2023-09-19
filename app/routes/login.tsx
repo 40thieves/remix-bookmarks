@@ -47,7 +47,7 @@ export default function Login() {
 
   return (
     <main>
-      <h2>Log in</h2>
+      <h1>Log in</h1>
       <Form method="post" className="login__form">
         <div>
           <label htmlFor="username">Username</label>

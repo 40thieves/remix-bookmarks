@@ -83,9 +83,9 @@ export default function BookmarkView() {
 
   return (
     <main>
-      <h2>
+      <h1>
         <a href={url}>{title || url}</a>
-      </h2>
+      </h1>
 
       <p className="view__description">{description}</p>
       <time dateTime={createdAt} className="view__created-at">

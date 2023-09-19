@@ -64,7 +64,7 @@ export default function New() {
 
   return (
     <main className="new__container">
-      <h2>Create new bookmark&hellip;</h2>
+      <h1>Create new bookmark&hellip;</h1>
       <Form method="post" className="new__form">
         <fieldset className="new__form-row">
           <label htmlFor="url">URL</label>

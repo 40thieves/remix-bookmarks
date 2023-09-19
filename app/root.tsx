@@ -118,11 +118,9 @@ function Layout({
   return (
     <>
       <header className="header__container">
-        <h1>
-          <Link to="/" prefetch="intent">
-            Bookmarks
-          </Link>
-        </h1>
+        <Link to="/" prefetch="intent" className="header__title">
+          Bookmarks
+        </Link>
 
         <nav aria-label="Main navigation" className="header__nav">
           {userId ? (
